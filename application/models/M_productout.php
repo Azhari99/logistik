@@ -144,7 +144,7 @@ class M_productout extends CI_Model
 									AND bk.status = 'CO'");
 		return $sql->row();
 	}
-
+	//Fazmi
 	public function invoicePOut($id)
 	{
 		$sql = $this->db->query("SELECT bk.tbl_barangkeluar_id,
