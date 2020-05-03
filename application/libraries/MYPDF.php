@@ -23,6 +23,6 @@ class MYPDF extends TCPDF
         // Set font
         $this->SetFont('times', 10);
         // Page number
-        $this->Cell(200, 10, 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
     }
 }
