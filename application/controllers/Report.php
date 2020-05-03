@@ -118,15 +118,15 @@ class Report extends CI_Controller
             </tr>
             <tr>
                 <td align="right" width="83%">Total Anggaran 1 Tahun</td>
-                <td>' . rupiah($data->budget_ins) . '</td>
+                <td align="right">' . rupiah($data->budget_ins) . '</td>
             </tr>
             <tr>
                 <td align="right" width="83%">Pengeluaran</td>
-                <td>' . rupiah($data->amount) . '</td>
+                <td align="right">' . rupiah($data->amount) . '</td>
             </tr>
             <tr>
                 <td align="right" width="83%">Sisa Anggaran</td>
-                <td>' . rupiah($data->budget_ins - $value->amount) . '</td>
+                <td align="right">' . rupiah($data->budget_ins - $value->amount) . '</td>
             </tr>
         </table>';
 
