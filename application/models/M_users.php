@@ -55,4 +55,25 @@ class M_users extends CI_Model
 	{
 		return $this->db->delete($this->_table, array('tbl_user_id' => $id));
 	}
+
+	public function checkLogin($post)
+	{
+		$this->db->where('value =', $post['username']);
+		$sql = $this->db->get($this->_table)->row();
+		if($sql) {
+			// cek password
+			$isPasswordTrue = password_verify($post['password'], $sql->password);
+			if($isPasswordTrue) {
+				$params = array(
+					'userid'	=> $sql->tbl_user_id,
+					'value'		=> $sql->value,
+					'name'		=> $sql->name,
+					'level'		=> $sql->level
+				);
+				$this->session->set_userdata($params);
+				return true;
+			}		
+		}
+		return false;
+	}
 }

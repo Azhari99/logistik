@@ -1,5 +1,5 @@
 <div class="navbar nav_title" style="border: 0;">
-  <a href="index.html" class="site_title"><i class="fa fa-inbox"></i> <span>Logistics</span></a>
+  <a href="<?= site_url() ?>" class="site_title"><i class="fa fa-inbox"></i> <span>Logistics</span></a>
 </div>
 
 <div class="clearfix"></div>
@@ -10,6 +10,6 @@
   </div>
   <div class="profile_info">
     <span>Welcome,</span>
-    <h2>John Doe</h2>
+    <h2><?= ucfirst($this->session->userdata('name')) ?></h2>
   </div>
 </div>
