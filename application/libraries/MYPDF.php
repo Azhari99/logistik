@@ -6,7 +6,7 @@ class MYPDF extends TCPDF
     public function Header()
     {
         // Logo
-        $image_file = K_PATH_IMAGES . 'logo_example.jpg';
+        // $image_file = K_PATH_IMAGES . 'logo_example.jpg';
         // $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font Times New Roman
         $this->SetFont('times', 'B', 15);
@@ -23,6 +23,6 @@ class MYPDF extends TCPDF
         // Set font
         $this->SetFont('times', 10);
         // Page number
-        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+        $this->Cell(200, 10, 'Page ' . $this->getAliasNumPage() . ' of ' . $this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
     }
 }

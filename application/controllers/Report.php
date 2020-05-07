@@ -53,7 +53,24 @@ class Report extends CI_Controller
         $pdf->SetFont('times', 'B', 11);
 
         // add a page
-        $pdf->AddPage('L', 'A4');
+        $pdf->AddPage('L', 'A5');
+
+        // -- set new background ---
+        if ($data->status != 'CO') {
+            // get the current page break margin
+            $bMargin = $pdf->getBreakMargin();
+            // get current auto-page-break mode
+            $auto_page_break = $pdf->getAutoPageBreak();
+            // disable auto-page-break
+            $pdf->SetAutoPageBreak(false, 0);
+            // set bacground image
+            $img_file = K_PATH_IMAGES . 'drafted.png';
+            $pdf->Image($img_file, 0, 0, 130, '', 'PNG', '', 'T', false, 300, 'C', false, false, 0, false, false, false);
+            // restore auto-page-break status
+            $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+            // set the starting point for the page content
+            $pdf->setPageMark();
+        }    
 
         // set a position
         $pdf->SetXY(5, 15);
@@ -101,7 +118,7 @@ class Report extends CI_Controller
         $pdf->SetXY(7, 50);
         $page_col = '<table border="1" style="width:100%">
             <tr align="center">
-                <th width="3%">No</th>
+                <th width="5%">No</th>
                 <th width="20%">Nama Produk</th>
                 <th width="30%">Keterangan</th>
                 <th width="10%">Qty</th>
@@ -109,7 +126,7 @@ class Report extends CI_Controller
                 <th width="20%">Jumlah</th>
             </tr>
             <tr>
-                <td align="center" width="3%">1</td>
+                <td align="center" width="5%">1</td>
                 <td width="20%">' . $data->value . "-" . $data->barang . '</td>
                 <td width="30%">' . $data->keterangan . '</td>
                 <td align="right" width="10%">' . $data->qtyentered . '</td>
@@ -117,21 +134,21 @@ class Report extends CI_Controller
                 <td align="right" width="20%">' . rupiah($data->amount) . '</td>
             </tr>
             <tr>
-                <td align="right" width="83%">Total Anggaran 1 Tahun</td>
+                <td align="right" width="85%">Total Anggaran 1 Tahun</td>
                 <td align="right">' . rupiah($data->budget_ins) . '</td>
             </tr>
             <tr>
-                <td align="right" width="83%">Pengeluaran</td>
+                <td align="right" width="85%">Pengeluaran</td>
                 <td align="right">' . rupiah($data->amount) . '</td>
             </tr>
             <tr>
-                <td align="right" width="83%">Sisa Anggaran</td>
+                <td align="right" width="85%">Sisa Anggaran</td>
                 <td align="right">' . rupiah($data->budget_ins - $value->amount) . '</td>
             </tr>
         </table>';
 
         $pdf->writeHTML($page_col, true, false, false, false, '');
-
+        
         //Close and output PDF document
         $pdf->Output('Report Barang Keluar', 'I');
     }

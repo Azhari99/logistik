@@ -264,12 +264,13 @@ CREATE TABLE `tbl_user` (
   `name` varchar(60) NOT NULL,
   `password` varchar(255) NOT NULL,
   `level` int(10) NOT NULL,
+  `lastlogin` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`tbl_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_user` */
 
-insert  into `tbl_user`(`tbl_user_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`password`,`level`) values (1,'Y','2020-04-12 13:00:51',0,'2020-04-12 13:00:51',0,'admin','admin','123',1),(2,'Y','2020-04-12 13:00:51',0,'2020-04-12 13:00:51',0,'Pimpinan','pimpinan','123',2),(3,'Y','2020-04-12 13:00:51',0,'2020-04-12 13:00:51',0,'user','user','123',3),(4,'Y','2020-04-12 13:00:51',0,'2020-04-12 13:00:51',0,'Indra','Indra','123',1),(7,'Y','2020-04-19 00:35:08',0,'2020-04-19 14:16:21',0,'Oki-170903','Oki Permana2','$2y$10$AxuDuVhXiHLBXabIiCQnreRBIqUkBwUZnLHYtFS2gNiVCaUnyT/BC',1);
+insert  into `tbl_user`(`tbl_user_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`password`,`level`,`lastlogin`) values (1,'Y','2020-05-04 12:52:53',0,'2020-05-04 12:52:53',0,'admin','Awn Admin','$2y$10$uAlYeQ0qqHwmBNOa6gRb0.bV2btb8/KflQsqMPGFZ7302cVQOcHpi',1,'2020-05-04 14:23:16');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -71,9 +71,16 @@ class M_users extends CI_Model
 					'level'		=> $sql->level
 				);
 				$this->session->set_userdata($params);
+				$this->updateLastLogin($sql->tbl_user_id);
 				return true;
 			}		
 		}
 		return false;
+	}
+
+	private function updateLastLogin($user_id) 
+	{
+		$sql = "UPDATE {$this->_table} SET lastlogin = now() WHERE tbl_user_id = {$user_id}";
+		$this->db->query($sql);
 	}
 }

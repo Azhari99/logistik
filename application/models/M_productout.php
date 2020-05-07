@@ -149,6 +149,7 @@ class M_productout extends CI_Model
 	{
 		$sql = $this->db->query("SELECT bk.tbl_barangkeluar_id,
 								bk.documentno,
+								bk.status,
 								bk.datetrx,
 								b.value,
 								b.name as barang,
