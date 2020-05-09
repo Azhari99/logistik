@@ -4,7 +4,7 @@ USE `db_inventori_isma`;
 
 /*Table structure for table `tbl_anggaran` */
 
-DROP TABLE IF EXISTS `tbl_anggaran`;
+DROP TABLE IF EXISTS `tbl_permintaan`;
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
