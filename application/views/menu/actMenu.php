@@ -35,7 +35,7 @@
 				$.each(data, function(i, item) {
 					$('[name="name_menu"]').val(data[i].name)
 					$('[name="icon_menu"]').val(data[i].icon)
-					$('[name="icon_menu"]').val(data[i].icon)
+					$('[name="url_menu"]').val(data[i].url)
 					$('[name="line_menu"]').val(data[i].seqno)
 					if (data[i].isactive === 'Y') {
 						$('[name=ismenu]').attr('checked', true)

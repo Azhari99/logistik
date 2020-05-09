@@ -1,18 +1,14 @@
 <?php
 
-class MYPDF extends TCPDF
+class POPDF extends TCPDF
 {
     //Page header
     public function Header()
     {
-        // Logo
-        // $image_file = K_PATH_IMAGES . 'logo_example.jpg';
-        // $this->Image($image_file, 10, 10, 15, '', 'JPG', '', 'T', false, 300, '', false, false, 0, false, false, false);
         // Set font Times New Roman
         $this->SetFont('times', 'B', 15);
         // Title
         $this->Cell(0, 15, 'Invoice Barang Keluar', 0, false, 'C', 0, '', 0, false, 'M', 'M');
-        // $this->Cell(0, 10, 'Invoice Barang Keluar');
     }
 
     // Page footer

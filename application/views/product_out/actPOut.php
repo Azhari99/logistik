@@ -229,7 +229,7 @@
 	}
 
 	function printProductOut(id) {
-		window.open('<?php echo site_url('report/invoice/') ?>' + id, '_blank');
+		window.open('<?php echo site_url('productout/rpt_invoice/') ?>' + id, '_blank');
 	}
 
 	function resetProductOut() {

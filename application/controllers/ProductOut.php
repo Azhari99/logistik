@@ -5,6 +5,7 @@ class ProductOut extends CI_Controller {
 
 	public function __construct() {
         parent::__construct();
+        $this->load->library('POPDF');
         $this->load->model('m_productout');
         $this->load->model('m_product');
         $this->load->model('m_institute');
@@ -367,5 +368,144 @@ class ProductOut extends CI_Controller {
     {
         $data = $this->m_productout->delete($id);
         echo json_encode($data);
+    }
+
+    public function rpt_invoice($id)
+    {
+        $data = $this->m_productout->invoicePOut($id);
+        $trx = date("Y", strtotime($data->datetrx));
+        $value = $this->m_productout->totalInstituteYear($data->tbl_instansi_id, $trx);
+
+        // create new PDF document
+        $pdf = new POPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('System Logistics');
+        $pdf->SetTitle('Report Product Out');
+        $pdf->SetSubject('Product Out');
+        $pdf->SetKeywords('PDF, logistik, system, produk, keluar');
+
+        // set header and footer fonts
+        $pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+        // set default monospaced font
+        $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+        // set margins
+        $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+        // set image scale factor
+        $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        // ---------------------------------------------------------
+
+        // set font
+        $pdf->SetFont('times', 'B', 11);
+
+        // add a page
+        $pdf->AddPage('L', 'A5');
+
+        // -- set new background ---
+        if ($data->status != 'CO') {
+            // get the current page break margin
+            $bMargin = $pdf->getBreakMargin();
+            // get current auto-page-break mode
+            $auto_page_break = $pdf->getAutoPageBreak();
+            // disable auto-page-break
+            $pdf->SetAutoPageBreak(false, 0);
+            // set bacground image
+            $img_file = K_PATH_IMAGES . 'drafted.png';
+            $pdf->Image($img_file, 0, 0, 130, '', 'PNG', '', 'T', false, 300, 'C', false, false, 0, false, false, false);
+            // restore auto-page-break status
+            $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+            // set the starting point for the page content
+            $pdf->setPageMark();
+        }
+
+        // set a position
+        $pdf->SetXY(5, 15);
+
+        $page_head = '<table>
+            <tr>
+                <td>
+                    <table cellspacing="5" style="float:right; width:100%">
+                        <tr>
+                            <td width="90px">Name Institute</td>
+                            <td width="5px">:</td>
+                            <td width="72%">' . $data->instansi . '</td>
+                        </tr>
+                        <tr>
+                            <td width="90px">Phone</td>
+                            <td width="5px">:</td>
+                            <td width="72%">' . $data->phone . '</td>
+                        </tr>
+                        <tr>
+                            <td width="90px">Address</td>
+                            <td width="5px">:</td>
+                            <td width="100%">' . $data->address . '</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <table cellspacing="5" style="float:right; width:100%">
+                        <tr>
+                            <td width="105px">Document No</td>
+                            <td width="5px">:</td>
+                            <td width="50%">' . $data->documentno . '</td>
+                        </tr>
+                        <tr>
+                            <td width="105px">Date Transaction</td>
+                            <td width="5px">:</td>
+                            <td width="50%">' . date("d-M-y", strtotime($data->datetrx)) . '</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>';
+
+        $pdf->writeHTML($page_head, true, false, false, false, '');
+
+        $pdf->SetXY(7, 50);
+        $page_col = '<table border="1" style="width:100%">
+            <tr align="center">
+                <th width="5%">No</th>
+                <th width="20%">Name Product</th>
+                <th width="10%">Qty</th>
+                <th width="20%">Unit Price</th>
+                <th width="20%">Amount</th>
+                <th width="30%">Description</th>
+            </tr>
+            <tr>
+                <td align="center" width="5%">1</td>
+                <td width="20%">' . $data->value . "-" . $data->barang . '</td>
+                <td align="right" width="10%">' . $data->qtyentered . '</td>
+                <td align="right" width="20%">' . rupiah($data->unitprice) . '</td>
+                <td align="right" width="20%">' . rupiah($data->amount) . '</td>
+                <td width="30%">' . $data->keterangan . '</td>
+            </tr>
+            <tr>
+                <td align="right" width="85%">Total Budget 1 Year</td>
+                <td align="right">' . rupiah($data->budget_ins) . '</td>
+            </tr>
+            <tr>
+                <td align="right" width="85%">Spending</td>
+                <td align="right">' . rupiah($data->amount) . '</td>
+            </tr>
+            <tr>
+                <td align="right" width="85%">Remaining Budget</td>
+                <td align="right">' . rupiah($data->budget_ins - $value->amount) . '</td>
+            </tr>
+        </table>';
+
+        $pdf->writeHTML($page_col, true, false, false, false, '');
+
+        //Close and output PDF document
+        $pdf->Output('Report Product Out', 'I');
     }
 }
