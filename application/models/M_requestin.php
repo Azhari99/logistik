@@ -50,6 +50,17 @@ class M_requestin extends CI_Model
 
         return $result;
 	}
+    
+    public function updateApi($updateApi)
+    {
+        $response = $this->_client->request('PUT', 'permintaan', [
+            'form_params' => $updateApi
+		]);
+		
+		$result = json_decode($response->getBody()->getContents(), true);
+
+        return $result;
+    }
 
 	public function update($data, $where)
 	{

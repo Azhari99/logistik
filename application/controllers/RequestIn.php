@@ -205,6 +205,7 @@ class RequestIn extends CI_Controller {
         $nama_barang = $product->name;
         $nama_instansi = $instansi->name;
         $keterangan = $get_detail->keterangan;
+        $documentno = $get_detail->documentno;
         
         if ($qty_out <= $qty_product) {
             $param_out = array(
@@ -224,12 +225,17 @@ class RequestIn extends CI_Controller {
                 'stat' => 1,
                 'key' => "inv123"
             );
-
+            $updateApi = array(
+                'status' => 'CO',
+                'documentno' => $documentno,
+                'key' => "inv123"
+            );
             $where_out = array('tbl_permintaan_id' => $id);
             $where_product = array('tbl_barang_id' => $get_detail->tbl_barang_id);
             $this->m_product->update($data_product, $where_product);
             $this->m_requestin->update($param_out, $where_out);
             $this->m_requestin->saveApi($dataApi);
+            $this->m_requestin->updateApi($updateApi);
             $data = array('success' => 'berhasil');
         } else {
             $data = array('error' => 'Qty barang tidak mencukupi');
