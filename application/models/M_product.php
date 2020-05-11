@@ -105,6 +105,19 @@ class M_product extends CI_Model
 		return $query;
 	}
 
+	public function listInstitute()
+	{
+		$uri = $this->uri->segment(1);
+		$this->db->select('tbl_instansi_id,
+							value, name, isactive');
+		$this->db->from('tbl_instansi');
+		$this->db->where('isactive', 'Y');
+		$this->db->order_by('value', 'ASC');
+		$query = $this->db->get()->result();
+		return $query;
+
+	}
+
 	public function totalTypeBudget($id_product, $type_id)
 	{
 		if ($id_product == null) {
@@ -214,6 +227,42 @@ class M_product extends CI_Model
 		if ($id != NULL) {
 			$this->db->where('b.tbl_barang_id', $id);
 		}
+		$sql_2 = $this->db->get_compiled_select();
+		
+		$query = $this->db->query($sql_1 . ' UNION ALL ' . $sql_2);
+		return $query->result();
+	}
+
+	public function InstituteProductOut($id, $start, $end)
+	{
+		$this->db->select('b.value,
+							b.name,
+							bk.datetrx,
+							SUM(bk.qtyentered) as QTY,
+							SUM(bk.amount) as amount');
+		$this->db->from('tbl_barang b');
+		$this->db->join('tbl_barangkeluar bk', 'bk.tbl_barang_id = b.tbl_barang_id', 'LEFT');
+		$this->db->where('bk.datetrx BETWEEN "'.$start.'"AND"'.$end.'"');	
+		if ($id != NULL) {
+			$this->db->where('b.tbl_barang_id', $id);
+		}
+		$this->db->group_by('b.value', 'b.name', 'bk.datetrx');
+
+		$sql_1 = $this->db->get_compiled_select();
+
+		$this->db->select('b.value,
+							b.name,
+							p.datetrx,
+							SUM(p.qtyentered) as QTY,
+							SUM(p.amount) as amount');
+		$this->db->from('tbl_barang b');
+		$this->db->join('tbl_permintaan p', 'p.tbl_barang_id = b.tbl_barang_id', 'LEFT');
+		$this->db->where('p.datetrx BETWEEN "' . $start . '"AND"' . $end . '"');
+		if ($id != NULL) {
+			$this->db->where('b.tbl_barang_id', $id);
+		}
+		$this->db->group_by('b.value', 'b.name', 'p.datetrx');
+		
 		$sql_2 = $this->db->get_compiled_select();
 		
 		$query = $this->db->query($sql_1 . ' UNION ALL ' . $sql_2);

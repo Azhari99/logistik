@@ -55,3 +55,5 @@
 <?php $this->load->view('menu/actMenu') ?>
 <?php $this->load->view('submenu/actSub') ?>
 <?php $this->load->view('budget/actBudget') ?>
+<?php $this->load->view('report/actReport') ?>
+
