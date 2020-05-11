@@ -180,4 +180,43 @@ class M_product extends CI_Model
 								AND YEAR(bk.datetrx) = $year)) xp");
 		return $sql->row();
 	}
+
+	public function listProductOut($id, $start, $end)
+	{
+		$this->db->select('b.value,
+							b.name,
+							bm.documentno,
+							bm.datetrx,
+							bm.qtyentered,
+							bm.unitprice,
+							bm.amount,
+							bm.keterangan');
+		$this->db->from('tbl_barang b');
+		$this->db->join('tbl_barangmasuk bm', 'bm.tbl_barang_id = b.tbl_barang_id', 'LEFT');
+		$this->db->where('bm.datetrx BETWEEN "'.$start.'"AND"'.$end.'"');		
+		if ($id != NULL) {
+			$this->db->where('b.tbl_barang_id', $id);
+		}
+		$sql_1 = $this->db->get_compiled_select();
+
+		$this->db->select('b.value,
+							b.name,
+							bk.documentno,
+							bk.datetrx,
+							bk.qtyentered,
+							bk.unitprice,
+							bk.amount,
+							bk.keterangan');
+		$this->db->from('tbl_barang b');
+		$this->db->join('tbl_barangkeluar bk', 'bk.tbl_barang_id = b.tbl_barang_id', 'LEFT');
+		$this->db->where('bk.datetrx BETWEEN "' . $start . '"AND"' . $end . '"')
+				->where('b.jenis_id', 2);
+		if ($id != NULL) {
+			$this->db->where('b.tbl_barang_id', $id);
+		}
+		$sql_2 = $this->db->get_compiled_select();
+		
+		$query = $this->db->query($sql_1 . ' UNION ALL ' . $sql_2);
+		return $query->result();
+	}
 }

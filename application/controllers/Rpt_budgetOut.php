@@ -8,7 +8,6 @@ class Rpt_budgetOut extends CI_Controller
     {
         parent::__construct();
         $this->load->library('BOPDF');
-        $this->load->model('m_productout');
         $this->load->model('m_product');
     }
 
@@ -19,14 +18,19 @@ class Rpt_budgetOut extends CI_Controller
     }
     public function report()
     {
-        // $data = $this->m_productout->invoicePOut($id);
-        // $trx = date("Y", strtotime($data->datetrx));
-        // $value = $this->m_productout->totalInstituteYear($data->tbl_instansi_id, $trx);
         $post = $this->input->post(null, TRUE);
+        $id_product = $post['isproduct'];
         $oriDateStart = str_replace('/', '-', $post['datetrx_start']);
         $oriDateEnd = str_replace('/', '-', $post['datetrx_end']);
-        $date_start = date("d-m-Y", strtotime($oriDateStart));
-        $date_end = date("d-m-Y", strtotime($oriDateEnd));
+        $date_start = date("Y-m-d", strtotime($oriDateStart));
+        $date_end = date("Y-m-d", strtotime($oriDateEnd));
+        $product = "";
+        if (!empty($id_product)) {
+            $detail_product = $this->m_product->detail($id_product)->row();
+            $product = $detail_product->value."-".$detail_product->name;
+        }
+        $list_product = $this->m_product->listProductOut($id_product, $date_start, $date_end);
+
         // create new PDF document
         $pdf = new BOPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -68,12 +72,12 @@ class Rpt_budgetOut extends CI_Controller
                         <tr>
                             <td width="85px">Date Transaction</td>
                             <td width="5px">:</td>
-                            <td width="30%">' . $date_start . ' s/d ' . $date_end . '</td>
+                            <td width="30%">' . date("d-m-Y", strtotime($oriDateStart)) . ' s/d ' . date("d-m-Y", strtotime($oriDateEnd)) . '</td>
                         </tr>
                         <tr>
                             <td width="85px">Product</td>
                             <td width="5px">:</td>
-                            <td width="30%">' . $date_start . ' s/d ' . $date_end . '</td>
+                            <td width="30%">' . $product . '</td>
                         </tr>
                     </table>
                 </td>
@@ -82,13 +86,50 @@ class Rpt_budgetOut extends CI_Controller
 
         $pdf->writeHTML($page_head, true, false, false, false, '');
         $pdf->SetXY(10, 30);
+        
         $page_col = '<table border="1" style="width:100%">
             <tr align="center">
                 <th width="5%">No</th>
-                <th width="25%">Nama Produk</th>
-                <th width="10%">Qty</th>
-                <th width="15%">Jumlah</th>
-                <th width="45%">Keterangan</th>
+                <th width="10%">Document No</th>
+                <th width="20%">Nama Produk</th>
+                <th width="7%">Qty</th>
+                <th width="15%">Unitprice</th>
+                <th width="15%">Amount</th>
+                <th width="30%">Description</th>
+            </tr>';
+        $number = 0;
+        foreach ($list_product as $value) {
+            $number++;
+            $page_col .= '<tr>
+                <td align="center" width="5%">'. $number. '</td>
+                <td width="10%">'. $value->documentno. '</td>
+                <td width="20%">' . $value->value . '-' . $value->name . '</td>';
+            if ($value->qtyentered != 0) {
+                $page_col .= '<td align="right" width="7%">' . $value->qtyentered . '</td>';
+            } else {
+                $page_col .= '<td align="right" width="7%"></td>';
+            }
+            if ($value->unitprice != 0) {
+                $page_col .= '<td align="right" width="15%">' . rupiah($value->unitprice) . '</td>';
+            } else {
+                $page_col .= '<td align="right" width="15%"></td>';
+            }
+            
+            $page_col .= '<td align="right" width="15%">' . rupiah($value->amount) . '</td>
+            <td width="30%">' . $value->keterangan . '</td>
+            </tr>';
+        }
+        $page_col .= '<tr>
+                <td align="right" width="72%">Total Budget</td>
+                <td align="right" width="30%"></td>
+            </tr>
+            <tr>
+                <td align="right" width="72%">Spending</td>
+                <td align="right" width="30%"></td>
+            </tr>
+            <tr>
+                <td align="right" width="72%">Remaining Budget</td>
+                <td align="right" width="30%"></td>
             </tr>
         </table>';
 
