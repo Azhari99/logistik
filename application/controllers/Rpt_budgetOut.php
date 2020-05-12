@@ -186,8 +186,8 @@ class Rpt_budgetOut extends CI_Controller
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('System Logistics');
-        $pdf->SetTitle('Report Barang Budget Keluar');
-        $pdf->SetSubject('Report Product Budget Out');
+        $pdf->SetTitle('Report Barang Budget Keluar Instansi');
+        $pdf->SetSubject('Report Product Budget Out Institute');
         $pdf->SetKeywords('PDF, logistik, system, produk, anggarang, keluar');
 
         // set header and footer fonts
@@ -269,6 +269,6 @@ class Rpt_budgetOut extends CI_Controller
         $pdf->writeHTML($page_col, true, false, false, false, '');
         
         //Close and output PDF document
-        $pdf->Output('Report Barang Budget Keluar', 'I');
+        $pdf->Output('Report Barang Budget Keluar Instansi', 'I');
     }
 }
