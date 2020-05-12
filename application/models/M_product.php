@@ -238,30 +238,30 @@ class M_product extends CI_Model
 		$this->db->select('b.value,
 							b.name,
 							bk.datetrx,
-							SUM(bk.qtyentered) as QTY,
-							SUM(bk.amount) as amount');
+							bk.qtyentered as QTY,
+							bk.amount as amount');
 		$this->db->from('tbl_barang b');
 		$this->db->join('tbl_barangkeluar bk', 'bk.tbl_barang_id = b.tbl_barang_id', 'LEFT');
 		$this->db->where('bk.datetrx BETWEEN "'.$start.'"AND"'.$end.'"');	
 		if ($id != NULL) {
-			$this->db->where('b.tbl_barang_id', $id);
+			$this->db->where('bk.tbl_instansi_id', $id);
 		}
-		$this->db->group_by('b.value', 'b.name', 'bk.datetrx');
+		//$this->db->group_by('b.value', 'b.name', 'bk.datetrx');
 
 		$sql_1 = $this->db->get_compiled_select();
 
 		$this->db->select('b.value,
 							b.name,
 							p.datetrx,
-							SUM(p.qtyentered) as QTY,
-							SUM(p.amount) as amount');
+							p.qtyentered as QTY,
+							p.amount as amount');
 		$this->db->from('tbl_barang b');
 		$this->db->join('tbl_permintaan p', 'p.tbl_barang_id = b.tbl_barang_id', 'LEFT');
 		$this->db->where('p.datetrx BETWEEN "' . $start . '"AND"' . $end . '"');
 		if ($id != NULL) {
-			$this->db->where('b.tbl_barang_id', $id);
+			$this->db->where('p.tbl_instansi_id', $id);
 		}
-		$this->db->group_by('b.value', 'b.name', 'p.datetrx');
+		//$this->db->group_by('b.value', 'b.name', 'p.datetrx');
 		
 		$sql_2 = $this->db->get_compiled_select();
 		

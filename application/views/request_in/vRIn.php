@@ -7,7 +7,7 @@
         <div class="x_panel">
           <div class="x_title">
             <h2>Request In</h2>
-            <p class="navbar-right"><a href="<?php echo site_url('requestin/add') ?>" class="btn btn-primary">New Request In</a></p>
+            <!-- <p class="navbar-right"><a href="<?php echo site_url('requestin/add') ?>" class="btn btn-primary">New Request In</a></p> -->
             <div class="clearfix"></div>
           </div>
           <div class="x_content">

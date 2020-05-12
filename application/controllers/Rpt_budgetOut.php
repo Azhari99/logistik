@@ -8,6 +8,7 @@ class Rpt_budgetOut extends CI_Controller
     {
         parent::__construct();
         $this->load->library('BOPDF');
+        $this->load->library('BOINSPDF');
         $this->load->model('m_product');
         $this->load->model('m_institute');
     }
@@ -36,7 +37,7 @@ class Rpt_budgetOut extends CI_Controller
         }
         else {
             $this->report2($id_instansi, $oriDateStart, $oriDateEnd, $date_start, $date_end);
-            // var_dump($post);
+            // var_dump($id_instansi);
             // die;
         }
     }
@@ -178,10 +179,9 @@ class Rpt_budgetOut extends CI_Controller
             $instansi = $detail_instansi->value."-".$detail_instansi->name;
         }
         $list_product = $this->m_product->InstituteProductOut($id_instansi, $date_start, $date_end);
-        // var_dump($list_product);
-        // die;
+        
         // create new PDF document
-        $pdf = new BOPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new BOINSPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -239,35 +239,30 @@ class Rpt_budgetOut extends CI_Controller
         $page_col = '<table border="1" style="width:100%">
             <tr align="center">
                 <th width="5%">No</th>
-                <th width="20%">Nama Produk</th>
-                <th width="7%">Qty</th>
-                <th width="15%">Jumlah</th>
+                <th width="60%">Nama Produk</th>
+                <th width="10%">Qty</th>
+                <th width="20%">Jumlah</th>
             </tr>';
         $number = 0;
+        $Jumlah = 0;
         foreach ($list_product as $value) {
             $number++;
             $page_col .= '<tr>
                 <td align="center" width="5%">'. $number. '</td>
-                <td width="20%">' . $value->value . '-' . $value->name . '</td>';
+                <td width="60%">' . $value->value . '-' . $value->name . '</td>';
             if ($value->QTY != 0) {
-                $page_col .= '<td align="right" width="7%">' . $value->QTY . '</td>';
+                $page_col .= '<td align="right" width="10%">' . $value->QTY . '</td>';
             } else {
-                $page_col .= '<td align="right" width="7%"></td>';
+                $page_col .= '<td align="right" width="10%"></td>';
             }
-            $page_col .= '<td align="right" width="15%">' . rupiah($value->amount) . '</td>
+            $page_col .= '<td align="right" width="20%">' . rupiah($value->amount) . '</td>
             </tr>';
+            $Jumlah = $Jumlah + $value->amount;
+            
         }
         $page_col .= '<tr>
-                <td align="right" width="72%">Total Budget</td>
-                <td align="right" width="30%"></td>
-            </tr>
-            <tr>
-                <td align="right" width="72%">Spending</td>
-                <td align="right" width="30%"></td>
-            </tr>
-            <tr>
-                <td align="right" width="72%">Remaining Budget</td>
-                <td align="right" width="30%"></td>
+                <td align="right" width="75%">Total Budget</td>
+                <td align="right" width="20%">' . rupiah($Jumlah) . '</td>
             </tr>
         </table>';
 
