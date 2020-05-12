@@ -124,4 +124,13 @@ class M_budget extends CI_Model
 									WHERE a.tahun = $currentYear ");
 		return $sql->row();
 	}
+
+	public function budgetYear($start, $end)
+	{
+		$this->db->select_sum('budget');
+		$this->db->from($this->_table);
+		$this->db->where('tahun BETWEEN "' . $start . '"AND"' . $end . '"');
+		$sql = $this->db->get();
+		return $sql->row();
+	}
 }

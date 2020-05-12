@@ -13,10 +13,10 @@
             <form class="form-horizontal form-label-left" method="POST" action="<?php echo site_url('rpt_budgetout/proses') ?>" target="_blank">
               <div class="form-group">
                 <div class="form-check form-check-inline col-md-6 col-md-offset-3">
-                  <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                  <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" required>
                   <label class="form-check-label" for="inlineRadio1">By Product</label>
 
-                  <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                  <input class="form-check-input inlineRadioOptions" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2" required>
                   <label class="form-check-label" for="inlineRadio2">By Institusi</label>
                 </div>
               </div>

@@ -9,6 +9,7 @@ class Rpt_budgetOut extends CI_Controller
         parent::__construct();
         $this->load->library('BOPDF');
         $this->load->library('BOINSPDF');
+        $this->load->model('m_budget');
         $this->load->model('m_product');
         $this->load->model('m_institute');
     }
@@ -32,30 +33,21 @@ class Rpt_budgetOut extends CI_Controller
         $date_end = date("Y-m-d", strtotime($oriDateEnd));
         
         if ($option == "option1" ) {
-
             $this->report($id_product, $oriDateStart, $oriDateEnd, $date_start, $date_end);
-        }
-        else {
+        }else {
             $this->report2($id_instansi, $oriDateStart, $oriDateEnd, $date_start, $date_end);
-            // var_dump($id_instansi);
-            // die;
         }
     }
 
     public function report($id_product, $oriDateStart, $oriDateEnd, $date_start, $date_end)
     {
-        // $post = $this->input->post(null, TRUE);
-        // $id_product = $post['isproduct'];
-        // $oriDateStart = str_replace('/', '-', $post['datetrx_start']);
-        // $oriDateEnd = str_replace('/', '-', $post['datetrx_end']);
-        // $date_start = date("Y-m-d", strtotime($oriDateStart));
-        // $date_end = date("Y-m-d", strtotime($oriDateEnd));
         $product = "";
         if (!empty($id_product)) {
             $detail_product = $this->m_product->detail($id_product)->row();
             $product = $detail_product->value."-".$detail_product->name;
         }
         $list_product = $this->m_product->listProductOut($id_product, $date_start, $date_end);
+        $budget = $this->m_budget->budgetYear($date_start, $date_end);
 
         // create new PDF document
         $pdf = new BOPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -124,6 +116,10 @@ class Rpt_budgetOut extends CI_Controller
                 <th width="30%">Description</th>
             </tr>';
         $number = 0;
+        $Jumlah = 0;
+        $totalBudget = $budget->budget;
+        $remain = $totalBudget - $Jumlah;
+        
         foreach ($list_product as $value) {
             $number++;
             $page_col .= '<tr>
@@ -144,18 +140,20 @@ class Rpt_budgetOut extends CI_Controller
             $page_col .= '<td align="right" width="15%">' . rupiah($value->amount) . '</td>
             <td width="30%">' . $value->keterangan . '</td>
             </tr>';
+            $Jumlah +=  $value->amount;
         }
+        
         $page_col .= '<tr>
                 <td align="right" width="72%">Total Budget</td>
-                <td align="right" width="30%"></td>
+                <td align="right" width="30%">' . rupiah($budget->budget) . '</td>
             </tr>
             <tr>
                 <td align="right" width="72%">Spending</td>
-                <td align="right" width="30%"></td>
+                <td align="right" width="30%">' . rupiah($Jumlah) . '</td>
             </tr>
             <tr>
                 <td align="right" width="72%">Remaining Budget</td>
-                <td align="right" width="30%"></td>
+                <td align="right" width="30%">' . rupiah($remain) . '</td>
             </tr>
         </table>';
 
@@ -167,12 +165,6 @@ class Rpt_budgetOut extends CI_Controller
 
     public function report2($id_instansi, $oriDateStart, $oriDateEnd, $date_start, $date_end)
     {
-        // $post = $this->input->post(null, TRUE);
-        // $id_product = $post['isproduct'];
-        // $oriDateStart = str_replace('/', '-', $post['datetrx_start']);
-        // $oriDateEnd = str_replace('/', '-', $post['datetrx_end']);
-        // $date_start = date("Y-m-d", strtotime($oriDateStart));
-        // $date_end = date("Y-m-d", strtotime($oriDateEnd));
         $instansi = "";
         if (!empty($id_instansi)) {
             $detail_instansi = $this->m_institute->detail($id_instansi)->row();
@@ -257,7 +249,7 @@ class Rpt_budgetOut extends CI_Controller
             }
             $page_col .= '<td align="right" width="20%">' . rupiah($value->amount) . '</td>
             </tr>';
-            $Jumlah = $Jumlah + $value->amount;
+            $Jumlah += $value->amount;
             
         }
         $page_col .= '<tr>
