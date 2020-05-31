@@ -1,3 +1,6 @@
+<?php
+isNotLogin();
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,6 +47,7 @@
   </body>
 </html>
 
+<?php $this->load->view('_partials/modal') ?>
 <?php $this->load->view('product/actProduct') ?>
 <?php $this->load->view('type/actType') ?>
 <?php $this->load->view('category/actCategory') ?>

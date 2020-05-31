@@ -34,11 +34,11 @@
 			dataType: 'json',
 			success: function(data) {
 				$.each(data, function(i, item) {
-					$('[name="name"]').val(data[i].name)
+					$('[name="name_budget"]').val(data[i].name)
 					$('[name="year_budget"]').val(data[i].tahun)
-					$('[name="typelog"]').val(data[i].jenis_id).change()
+					$('[name="typelog_budget"]').val(data[i].jenis_id).change()
 					$('[name="an_budget"]').val(formatRupiah(data[i].budget))
-					$('[name="desc"]').val(data[i].keterangan)
+					$('[name="desc_budget"]').val(data[i].keterangan)
 					if (data[i].isactive === 'Y') {
 						$('[name=isbudget]').attr('checked', true)
 					} else {
@@ -49,7 +49,7 @@
 		})
 	}
 
-	function deleteCategory(id) {
+	function deleteBudget(id) {
 		if (confirm("Apakah data akan dihapus ?")) {
 			$.ajax({
 				url: '<?php echo site_url('budget/actDelete/') ?>' + id,
@@ -130,7 +130,7 @@
 
 	function budgetCategory() {
 		$('#resetBudget').click(function() {
-			$('input[name=name]').val('')
+			$('input[name=name_budget]').val('')
 			$('input[name=an_budget]').val('')
 			$('.select2').val(null).trigger('change')
 			$('textarea').val('')

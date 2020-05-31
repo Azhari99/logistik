@@ -29,9 +29,11 @@ class M_category extends CI_Model
 		$isactive = $this->input->post('iscategory');
 		// $isdefault = $this->input->post('isdefault');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
-		$this->jenis_id = $post['typelog'];
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
+		$this->value = $post['code_cat'];
+		$this->name = $post['name_cat'];
+		$this->jenis_id = $post['typelog_cat'];
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {
@@ -48,17 +50,17 @@ class M_category extends CI_Model
 	public function update()
 	{
 		$isactive = $this->input->post('iscategory');
-		$isdefault = $this->input->post('isdefault');
+		// $isdefault = $this->input->post('isdefault');
+		$this->updatedby = $this->session->userdata('userid');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
-		$this->jenis_id = $post['typelog'];
+		$this->value = $post['code_cat'];
+		$this->name = $post['name_cat'];
+		$this->jenis_id = $post['typelog_cat'];
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {
             $this->isactive = 'N';
-        }
-        
+        }        
         // if (isset($isdefault)) {
         //     $this->isdefault = 'Y';
         // } else {

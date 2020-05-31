@@ -19,7 +19,7 @@
                   <th width="100px">Code Type</th>
                   <th>Name</th>
                   <th width="50px">Status</th>
-                  <th width="100px"></th>
+                  <th width="50px"></th>
                 </tr>
               </thead>
             </table>

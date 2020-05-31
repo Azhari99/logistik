@@ -46,7 +46,6 @@ class Submenu extends CI_Controller
     public function add()
     {
         $data['menu'] = $this->m_menu->getMenu();
-        // $data['lineno'] = $this->m_submenu->seqno();
         $this->template->load('overview', 'submenu/addSub', $data);
     }
 

@@ -18,7 +18,6 @@ class Web extends CI_Controller {
         $data['budget'] = $currentBudget;
         $data['budgetOut'] = $budgetOut;
         $data['remainBudget'] = $remainBudget;
-        isNotLogin();
     	$this->template->load('overview', 'web/dashboard', $data);
     }
 

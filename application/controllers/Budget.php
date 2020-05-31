@@ -40,8 +40,8 @@ class Budget extends CI_Controller {
             }
             $row[] = '<center>            
                 <a class="btn btn-primary btn-xs" href="budget/edit/'.$value->tbl_anggaran_id.'" title="Edit"><i class="fa fa-edit"></i></a>
-                <a class="btn btn-danger btn-xs"  onclick="deleteCategory('."'".$value->tbl_anggaran_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
                 </center>';
+                // <a class="btn btn-danger btn-xs"  onclick="deleteCategory('."'".$value->tbl_anggaran_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             $data[] = $row;
         }
         $result = array('data' => $data );
@@ -56,9 +56,9 @@ class Budget extends CI_Controller {
     
     public function actAdd()
     {
-        $this->form_validation->set_rules('name','name', 'required');
+        $this->form_validation->set_rules('name_budget','name', 'required');
         $this->form_validation->set_rules('year_budget','year', 'required');
-        $this->form_validation->set_rules('typelog','type logistics', 'required');
+        $this->form_validation->set_rules('typelog_budget','type logistics', 'required');
         $this->form_validation->set_rules('an_budget','annual budget', 'required');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
@@ -107,9 +107,9 @@ class Budget extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_budget');
-        $this->form_validation->set_rules('name', 'name', 'required');
+        $this->form_validation->set_rules('name_budget', 'name', 'required');
         $this->form_validation->set_rules('year_budget', 'year', 'required');
-        $this->form_validation->set_rules('typelog', 'type logistics', 'required');
+        $this->form_validation->set_rules('typelog_budget', 'type logistics', 'required');
         $this->form_validation->set_rules('an_budget', 'annual budget', 'required');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 

@@ -143,4 +143,38 @@ class Users extends CI_Controller {
         $data = $this->m_users->delete($id);
         echo json_encode($data);
     }
+
+    public function changePass()
+    {
+        $this->form_validation->set_rules('pass_old', 'old password', 'callback_password_check');
+        $this->form_validation->set_rules('pass_new', 'new password', 'required');
+        $this->form_validation->set_rules('pass_conf', 'password confirmation', 'required|matches[pass_new]');
+
+        $post = $this->input->post(null, true);
+        if ($this->form_validation->run()) {
+            $this->m_users->updatePass($post);
+            $data = array('success' => true);
+        } else {
+            $data = array(
+                'error'             => true,
+                'pass_old_error'    => form_error('pass_old'),
+                'pass_new_error'    => form_error('pass_new'),
+                'pass_conf_error'    => form_error('pass_conf')
+            );
+        }
+        echo json_encode($data);
+    }
+
+    public function password_check()
+    {
+        $post = $this->input->post(null, true);
+        $id_user = $post['id_user'];
+        $sql = $this->m_users->detail($id_user)->row();
+        $isPassOld = password_verify($post['pass_old'], $sql->password);
+        if ($isPassOld == false) {
+            $this->form_validation->set_message('password_check', 'The {field} does not match');
+            return false;
+        }
+        return true ;
+    }
 }

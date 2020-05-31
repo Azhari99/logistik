@@ -18,6 +18,8 @@ class M_users extends CI_Model
 	{
 		$isactive = $this->input->post('isuser');
 		$post = $this->input->post();
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
 		$this->value = $post['username'];
 		$this->name = $post['name'];
 		$this->password = password_hash($post['password'], PASSWORD_BCRYPT);
@@ -34,10 +36,12 @@ class M_users extends CI_Model
 	{
 		$isactive = $this->input->post('isuser');
 		$post = $this->input->post();
+		$this->updatedby = $this->session->userdata('userid');
 		$this->value = $post['username'];
 		$this->name = $post['name'];
 		if (!empty($post['password'])) {
 			$this->password = password_hash($post['password'], PASSWORD_BCRYPT);
+			$this->changedpassword = date('Y-m-d H:i:s');
 		}
 		$this->level = $post['level'];
         if (isset($isactive)) {
@@ -82,5 +86,16 @@ class M_users extends CI_Model
 	{
 		$sql = "UPDATE {$this->_table} SET lastlogin = now() WHERE tbl_user_id = {$user_id}";
 		$this->db->query($sql);
+	}
+
+	public function updatePass($post)
+	{
+		$this->password = password_hash($post['pass_new'], PASSWORD_BCRYPT);
+		$this->updated = date('Y-m-d H:i:s');
+		$this->updatedby = $post['id_user'];
+		$this->changedpassword = date('Y-m-d H:i:s');
+		$where = array('tbl_user_id' => $post['id_user']);
+		$this->db->where($where);
+		$this->db->update($this->_table, $this);
 	}
 }

@@ -61,7 +61,7 @@
               <div class="ln_solid"></div>
               <div class="form-group">
                 <div class="col-md-6 col-md-offset-3">
-                  <a href="<?php echo site_url('submenu') ?>" class="btn btn-warning">Back</a>
+                  <a href="<?php echo site_url('submenu') ?>" class="btn btn-default">Back</a>
                   <button type="reset" class="btn btn-danger">Reset</button>
                   <button type="submit" class="btn btn-primary">Save</button>
                 </div>

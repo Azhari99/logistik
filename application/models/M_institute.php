@@ -18,11 +18,13 @@ class M_institute extends CI_Model
 	{
 		$isactive = $this->input->post('isinsti');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
-		$this->address = $post['address'];
-		$this->email = $post['email'];
-		$this->phone = $post['phone'];
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
+		$this->value = $post['code_ins'];
+		$this->name = $post['name_ins'];
+		$this->address = $post['address_ins'];
+		$this->email = $post['email_ins'];
+		$this->phone = $post['phone_ins'];
 		$this->budget = changeFormat($post['budget_ins']);
         if (isset($isactive)) {
             $this->isactive = 'Y';
@@ -36,11 +38,12 @@ class M_institute extends CI_Model
 	{
 		$isactive = $this->input->post('isinsti');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
-		$this->address = $post['address'];
-		$this->email = $post['email'];
-		$this->phone = $post['phone'];
+		$this->updatedby = $this->session->userdata('userid');
+		$this->value = $post['code_ins'];
+		$this->name = $post['name_ins'];
+		$this->address = $post['address_ins'];
+		$this->email = $post['email_ins'];
+		$this->phone = $post['phone_ins'];
 		$this->budget = changeFormat($post['budget_ins']);
         if (isset($isactive)) {
             $this->isactive = 'Y';
@@ -91,15 +94,33 @@ class M_institute extends CI_Model
 
 	public function getTotalBudget($id_institute)
 	{
-		if ($id_institute != null) {
+		if (!empty($id_institute)) {
 			$this->db->select_sum('budget');
-			$sql = $this->db->get_where($this->_table, array('tbl_instansi_id' => $id_institute));
-			return $sql->row();
+			$this->db->from($this->_table);
+			$this->db->where('tbl_instansi_id !=', $id_institute)
+					->where('isactive', 'Y');
+			return $this->db->get()->row();
 		} else {
 			$this->db->select_sum('budget');
-			$sql = $this->db->get($this->_table);
-			return $sql->row();
-		}
-		
+			$this->db->from($this->_table);
+			$this->db->where('isactive', 'Y');
+			return $this->db->get()->row();
+		}		
+	}
+
+	public function totalInstituteBudget($id_institute)
+	{
+		if (!empty($id_institute)) {
+			$this->db->select_sum('budget');
+			$this->db->from($this->_table);
+			$this->db->where('tbl_instansi_id', $id_institute)
+					->where('isactive', 'Y');
+			return $this->db->get()->row();
+		} else {
+			$this->db->select_sum('budget');
+			$this->db->from($this->_table);
+			$this->db->where('isactive', 'Y');
+			return $this->db->get()->row();
+		}		
 	}
 }

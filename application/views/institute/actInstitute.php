@@ -2,9 +2,9 @@
 	var tb_institute;
 	getInstituteEdit()
 	numberOnly()
-	
+
 	$(document).ready(function() {
-		$('#code_institute').attr('readonly', true)
+		$('#code_ins').attr('readonly', true)
 
 		tb_institute = $('#table-institute').DataTable({
 			'ajax': '<?php echo site_url('institute/getAll') ?>',
@@ -36,11 +36,11 @@
 			dataType: 'json',
 			success: function(data) {
 				$.each(data, function(i, item) {
-					$('[name="code"]').val(data[i].value)
-					$('[name="name"]').val(data[i].name)
-					$('[name="address"]').val(data[i].address)
-					$('[name="email"]').val(data[i].email)
-					$('[name="phone"]').val(data[i].phone)
+					$('[name="code_ins"]').val(data[i].value)
+					$('[name="name_ins"]').val(data[i].name)
+					$('[name="address_ins"]').val(data[i].address)
+					$('[name="email_ins"]').val(data[i].email)
+					$('[name="phone_ins"]').val(data[i].phone)
 					$('[name="budget_ins"]').val(formatRupiah(data[i].budget))
 					if (data[i].isactive === 'Y') {
 						$('[name=isinsti]').attr('checked', true)
@@ -72,7 +72,7 @@
 	}
 
 	function numberOnly() {
-		$('#phone').keypress(function(event) { //Required Number
+		$('#phone_ins').keypress(function(event) { //Required Number
 			var keycode = event.which;
 			if (!(event.shiftKey == false && (keycode == 46 || keycode == 8 || keycode == 37 || keycode == 39 || (keycode >= 48 && keycode <= 57)))) {
 				event.preventDefault();

@@ -5,7 +5,7 @@
 	typeList()
 
 	$(document).ready(function() {
-		// $('#code').attr('readonly', true)
+		$('#code_product').attr('readonly', true)
 		$('#lqty').hide()
 		$('#uprice').hide()
 
@@ -35,18 +35,18 @@
 			data: {
 				product_id: product_id
 			},
-			async: true,
+			// async: true,
 			dataType: 'json',
 			success: function(data) {
 				$.each(data, function(i, item) {
-					$('[name="code"]').val(data[i].value)
-					$('[name="name"]').val(data[i].name)
-					$('[name="desc"]').val(data[i].keterangan)
-					$('[name="typelog"]').val(data[i].jenis_id).change()
-					$('[name="category"]').val(data[i].kategori_id).change()
-					$('[name="qty"]').val(data[i].qtyentered)
-					$('[name="unitprice"]').val(formatRupiah(data[i].unitprice))
-					$('[name="budget"]').val(formatRupiah(data[i].budget))
+					$('[name="code_product"]').val(data[i].value)
+					$('[name="name_product"]').val(data[i].name)
+					$('[name="typelog_product"]').val(data[i].jenis_id).change()
+					$('[name="category_product"]').val(data[i].kategori_id).change()
+					$('[name="qty_product"]').val(data[i].qtyentered)
+					$('[name="unitprice_product"]').val(formatRupiah(data[i].unitprice))
+					$('[name="budget_product"]').val(formatRupiah(data[i].budget))
+					$('[name="desc_product"]').val(data[i].keterangan)
 					if (data[i].isactive === 'Y') {
 						$('[name=isproduct]').attr('checked', true)
 					} else {
@@ -77,7 +77,7 @@
 	}
 
 	function typeList() {
-		$('#typelog').on('change', function() {
+		$('#typelog_product').on('change', function() {
 			var type_id = $(this).val()
 			var kategori_id = $('#id_kategori').val()
 			if (type_id != 2) {
@@ -96,12 +96,12 @@
 				},
 				dataType: 'JSON',
 				success: function(data) {
-					$('#category').empty()
+					$('#category_product').empty()
 					$.each(data, function(index, value) {
 						if (kategori_id == value.tbl_kategori_id) {
-							$('#category').append('<option value="' + value.tbl_kategori_id + '" selected>' + value.name + '</option>').change()
+							$('#category_product').append('<option value="' + value.tbl_kategori_id + '" selected>' + value.name + '</option>').change()
 						} else {
-							$('#category').append('<option value="' + value.tbl_kategori_id + '">' + value.name + '</option>')
+							$('#category_product').append('<option value="' + value.tbl_kategori_id + '">' + value.name + '</option>')
 						}
 					})
 				}
@@ -111,9 +111,11 @@
 
 	function resetProduct() {
 		$('#resetProduct').click(function() {
-			$('input[name=name]').val('')
+			$('input[name=name_product]').val('')
 			$('textarea').val('')
 			$('.select2').val(null).trigger('change')
+			$('#lqty').hide()
+			$('#uprice').hide()
 		})
 	}
 </script>

@@ -6,7 +6,7 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2>Edit Product In</h2>
+            <h2>Edit Product Out</h2>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">
@@ -91,6 +91,14 @@
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                   <textarea class="form-control col-md-7 col-xs-12" id="desc_out" name="desc_out"></textarea>
+                </div>
+              </div>
+              <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nodin_file_out">File Nodin Barang Keluar
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <input type="file" class="control-label" id="nodin_file_out" name="nodin_file_out">
+                  <small>(Maksimal Upload 5Mb)</small>
                 </div>
               </div>
               <input type="hidden" class="form-control col-md-3 col-xs-12" id="id_barang_out" name="id_barang_out" value="<?= $product_out_id ?>" readonly>

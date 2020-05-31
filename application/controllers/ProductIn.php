@@ -82,13 +82,7 @@ class ProductIn extends CI_Controller {
         $trxYear =  $date[2];
         $datetrx = ($trxYear.'-'.$trxMonth.'-'.$trxDay);
 
-        $product_detail = $this->m_product->detail($product)->row();
-        $qtyLimit = $product_detail->qtyentered;
-        $budgetProduct = $product_detail->budget;
-        $budget_detail = $this->m_budget->getBudget($product_detail->jenis_id, $trxYear);        
-        $sumProductIn = $this->m_productin->totalQtyProductIn(null, $product, $trxYear);
-        $qtyIn = $qty + $sumProductIn->qtyentered;
-        $budgetIn = $amount + $sumProductIn->amount;
+       
 
         if ($this->form_validation->run() == FALSE) {
             $data['product'] = $this->m_product->listProduct();
@@ -96,6 +90,14 @@ class ProductIn extends CI_Controller {
             $this->template->load('overview', 'product_in/addPIn', $data);
 
         } else {
+            $product_detail = $this->m_product->detail($product)->row();
+            $qtyLimit = $product_detail->qtyentered;
+            $budgetProduct = $product_detail->budget;
+            $budget_detail = $this->m_budget->getBudget($product_detail->jenis_id, $trxYear);
+            $sumProductIn = $this->m_productin->totalQtyProductIn(null, $product, $trxYear);
+            $qtyIn = $qty + $sumProductIn->qtyentered;
+            $budgetIn = $amount + $sumProductIn->amount;
+
             if ($budget_detail != null) {
                 $budgetYear = $budget_detail->tahun;
                 $status = $budget_detail->status;
@@ -104,17 +106,19 @@ class ProductIn extends CI_Controller {
                     if($_FILES['nodin_file_in']['name'] != null) {
                         if($this->upload->do_upload('nodin_file_in')) {
                             $file_name = $this->upload->data('file_name');
-                            $param_in = array(
-                                    'documentno'    => $code,
-                                    'datetrx'       => $datetrx,
-                                    'tbl_barang_id' => $product,
-                                    'qtyentered'    => $qty,
-                                    'unitprice'     => $unitprice,
-                                    'amount'        => $amount,
-                                    'status'        => 'DR',
-                                    'keterangan'    => $desc,
-                                    'file'          => $file_name
-                                );
+                            $param_in = array(                                
+                                'documentno'    => $code,
+                                'datetrx'       => $datetrx,
+                                'tbl_barang_id' => $product,
+                                'qtyentered'    => $qty,
+                                'unitprice'     => $unitprice,
+                                'amount'        => $amount,
+                                'status'        => 'DR',
+                                'keterangan'    => $desc,
+                                'file'          => $file_name,
+                                'createdby'     => $this->session->userdata('userid'),
+                                'updatedby'     => $this->session->userdata('userid'),
+                            );
                             $this->m_productin->save($param_in);
                             if ($this->db->affected_rows() > 0) {
                                 $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade in" role="alert">'.
@@ -130,6 +134,8 @@ class ProductIn extends CI_Controller {
                         }                
                     } else {
                         $param_in = array(
+                            'createdby'     => $this->session->userdata('userid'),
+                            'updatedby'     => $this->session->userdata('userid'),
                             'documentno'    => $code,
                             'datetrx'       => $datetrx,
                             'tbl_barang_id' => $product,
@@ -215,15 +221,7 @@ class ProductIn extends CI_Controller {
         $trxDay =  $date[0];
         $trxMonth =  $date[1];
         $trxYear =  $date[2];
-        $datetrx = ($trxYear.'-'.$trxMonth.'-'.$trxDay);
-
-        $product_detail = $this->m_product->detail($product)->row();
-        $qtyLimit = $product_detail->qtyentered;
-        $budgetProduct = $product_detail->budget;
-        $budget_detail = $this->m_budget->getBudget($product_detail->jenis_id, $trxYear);
-        $sumProductIn = $this->m_productin->totalQtyProductIn($id_barang_in, $product, $trxYear);
-        $qtyIn = $qty + $sumProductIn->qtyentered;
-        $budgetIn = $amount + $sumProductIn->amount;
+        $datetrx = ($trxYear.'-'.$trxMonth.'-'.$trxDay);        
 
         if ($this->form_validation->run() == FALSE) {
             $data['product_in_id'] = $id_barang_in;
@@ -231,6 +229,14 @@ class ProductIn extends CI_Controller {
             $this->template->load('overview', 'product_in/editPin', $data);
 
         } else {
+            $product_detail = $this->m_product->detail($product)->row();
+            $qtyLimit = $product_detail->qtyentered;
+            $budgetProduct = $product_detail->budget;
+            $budget_detail = $this->m_budget->getBudget($product_detail->jenis_id, $trxYear);
+            $sumProductIn = $this->m_productin->totalQtyProductIn($id_barang_in, $product, $trxYear);
+            $qtyIn = $qty + $sumProductIn->qtyentered;
+            $budgetIn = $amount + $sumProductIn->amount;
+
             if ($budget_detail != null) {
                 $budgetYear = $budget_detail->tahun;
                 $status = $budget_detail->status;
@@ -254,7 +260,9 @@ class ProductIn extends CI_Controller {
                                 'amount'        => $amount,
                                 'status'        => 'DR',
                                 'keterangan'    => $desc,
-                                'file'          => $file_name
+                                'file'          => $file_name,
+                                'updatedby'     => $this->session->userdata('userid'),
+                                'updated'       => date('Y-m-d H:i:s')
                             );
                             $where_in = array('tbl_barangmasuk_id' => $id_barang_in);
 
@@ -281,6 +289,7 @@ class ProductIn extends CI_Controller {
                             'amount'        => $amount,
                             'status'        => 'DR',
                             'keterangan'    => $desc,
+                            'updatedby'     => $this->session->userdata('userid'),
                             'updated'       => date('Y-m-d H:i:s')
                         );
                         $where_in = array('tbl_barangmasuk_id' => $id_barang_in);
@@ -336,9 +345,10 @@ class ProductIn extends CI_Controller {
                     'status' => 'CO'
                 );
             $data_product = array(
-                        'qtyavailable'  => $qty_in + $qty,
-                        'updated'       => date('Y-m-d H:i:s')
-                    );
+                'qtyavailable'  => $qty_in + $qty,
+                'updatedby'     => $this->session->userdata('userid'),
+                'updated'       => date('Y-m-d H:i:s')
+            );
             $where_in = array('tbl_barangmasuk_id' => $id);
             $where_product = array('tbl_barang_id' => $get_detail->tbl_barang_id);
             $this->m_product->update($data_product,$where_product);

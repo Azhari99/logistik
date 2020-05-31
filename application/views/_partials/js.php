@@ -16,6 +16,8 @@
 <!-- autoNumeric -->
 <script src="<?php echo base_url('assets/vendors/auto-numeric/autoNumeric.js') ?>"></script>
 <script type="text/javascript">
+	doChangePass()
+
 	$(document).ready(function() {
 		$('.select2').select2()
 
@@ -37,6 +39,43 @@
 
 		$('.rupiah').autoNumeric('init') //inisialisasi currency rupiah
 		numberMin()
+
+		$('#saveChange').on('click', function() {
+			var url = '<?php echo site_url('users/changePass') ?>';
+
+			$.ajax({
+				url: url,
+				method: 'POST',
+				data: $('#form_change_pass').serialize(),
+				dataType: 'JSON',
+				success: function(data) {
+					if (data.error) {
+						if (data.pass_old_error != '') {
+							$('#pass_old_error').html(data.pass_old_error)
+						}
+						if (data.pass_new_error != '') {
+							$('#pass_new_error').html(data.pass_new_error)
+						}
+						if (data.pass_conf_error != '') {
+							$('#pass_conf_error').html(data.pass_conf_error)
+						}
+					}
+					if (data.success) {
+						var success_msg = '<h4><i class="icon fa fa-info"></i> Sukses!</h4> Password berhasil diubah !';
+						$.bootstrapGrowl(success_msg, {
+							type: 'success',
+							width: 'auto',
+							align: 'center'
+						})
+						$('#modal_change_pass').modal('hide')
+						$('#form_change_pass')[0].reset()
+						$('#pass_old_error').html('')
+						$('#pass_new_error').html('')
+						$('#pass_conf_error').html('')
+					}
+				}
+			})
+		})
 	})
 
 	function alertComplete() {
@@ -80,5 +119,43 @@
 		}
 
 		return rupiah ? 'Rp.' + rupiah + ',' + '00' : '';
+	}
+
+	function doChangePass() {
+		$('#changePass').on('click', function() {
+			$('.modal-title').text('Change Password')
+			$('#modal_change_pass').modal({
+				backdrop: 'static',
+				keyboard: false
+			})
+		})
+	}
+
+	function doShowProfile(id) {
+		$.ajax({
+			url: '<?php echo site_url('users/get_users_edit') ?>',
+			method: 'POST',
+			data: {
+				user_id: id
+			},
+			dataType: 'JSON',
+			success: function(data) {
+				$.each(data, function(i, item) {
+					$('[name="show_username"]').val(data[i].value)
+					$('[name="show_name"]').val(data[i].name)
+					$('[name="show_password"]').val(data[i].password)
+				})
+				$('[name="show_username"]').prop('readonly', true)
+				$('[name="show_name"]').prop('readonly', true)
+				$('[name="show_password"]').prop('readonly', true)
+				$('[name="show_active"]').prop('disabled', true)
+				$('[name="show_active"]').prop('checked', true)
+				$('.modal-title').text('Show Profile')
+				$('#modal_show_profile').modal({
+					backdrop: 'static',
+					keyboard: false
+				})
+			}
+		})
 	}
 </script>

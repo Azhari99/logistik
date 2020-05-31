@@ -39,7 +39,9 @@ class ProductOut extends CI_Controller {
                 $row[] = rupiah($value->amount);
             }
             
-            $row[] = $value->keterangan;
+            $row[] = $value->keterangan;            
+            $row[] = $value->file;
+            // $row[] = '<a href="' . base_url('/productout/download/'). $value->file . '">'.$value->file.'</a>';
             
             if($value->status == 'CO'){
                 $row[] = '<center><span class="label label-success">Completed</span></center>';
@@ -104,20 +106,23 @@ class ProductOut extends CI_Controller {
             $type_id = $product_detail->jenis_id;
             $budgetProduct = $product_detail->budget;
             $budget_detail = $this->m_budget->getBudget($type_id, $trxYear);
-            $sumProductOut = $this->m_productout->totalQtyProductOut(null, $product, $trxYear);
-            $sumInstituteOut = $this->m_productout->totalInstituteOut($institute, $trxYear);
-
+            $sumBudgetOut = $this->m_productout->totalBudgetProductOut(null, $product, $trxYear);
+            $sumQtyOut = $this->m_productout->totalQtyProductOut(null, $product, $trxYear);
+            $sumInstituteOut = $this->m_productout->totalInstituteOut(null, $institute, $trxYear);
+            
             if ($type_id == 2) {
                 $qtyOut = $qty = $unitprice = 0;
                 $amount = $budget;
                 $instituteOut = $budget + $sumInstituteOut->amount;
-                $budgetOut = $budget + $sumProductOut->amount;
+                $budgetOut = $budget + $sumBudgetOut->amount;
             } else {
-                $qtyOut = $qty + $sumProductOut->qtyentered;
+                $qtyOut = $qty;
+                $qtyOut = $qty + $sumQtyOut->qtyentered;
                 $amount = $total;
                 $instituteOut = $total + $sumInstituteOut->amount;
                 $budgetOut = $total;
             }
+
             $institute_detail = $this->m_institute->detail($institute)->row();
             $budgetIns = $institute_detail->budget;
 
@@ -125,25 +130,59 @@ class ProductOut extends CI_Controller {
                 $budgetYear = $budget_detail->tahun;
                 $status = $budget_detail->status;
                 if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
-                    $param_out = array(
-                        'documentno'        => $code,
-                        'datetrx'           => $datetrx,
-                        'tbl_barang_id'     => $product,
-                        'tbl_instansi_id'   => $institute,
-                        'qtyentered'        => $qty,
-                        'unitprice'         => $unitprice,
-                        'amount'            => $amount,
-                        'status'            => 'DR',
-                        'keterangan'        => $desc
-                    );
-                    $this->m_productout->save($param_out);
-                    if ($this->db->affected_rows() > 0) {
-                        $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                    if ($_FILES['nodin_file_out']['name'] != null) {
+                        if ($this->upload->do_upload('nodin_file_out')) {
+                            $file_name = $this->upload->data('file_name');
+                            $param_out = array(
+                                'documentno'        => $code,
+                                'datetrx'           => $datetrx,
+                                'tbl_barang_id'     => $product,
+                                'tbl_instansi_id'   => $institute,
+                                'qtyentered'        => $qty,
+                                'unitprice'         => $unitprice,
+                                'amount'            => $amount,
+                                'status'            => 'DR',
+                                'keterangan'        => $desc,
+                                'file'              => $file_name,
+                                'createdby'         => $this->session->userdata('userid'),
+                                'updatedby'         => $this->session->userdata('userid')
+                            );
+                            $this->m_productout->save($param_out);
+                            if ($this->db->affected_rows() > 0) {
+                                $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                                    '</button>' .
+                                    'Data berhasil disimpan</div>');
+                            }
+                            echo "<script>window.location='" . site_url('productout') . "';</script>";
+                        } else {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            echo "<script>window.location='" . site_url('productout/add') . "';</script>";
+                        }
+                    } else {
+                        $param_out = array(
+                            'documentno'        => $code,
+                            'datetrx'           => $datetrx,
+                            'tbl_barang_id'     => $product,
+                            'tbl_instansi_id'   => $institute,
+                            'qtyentered'        => $qty,
+                            'unitprice'         => $unitprice,
+                            'amount'            => $amount,
+                            'status'            => 'DR',
+                            'keterangan'        => $desc,
+                            'createdby'         => $this->session->userdata('userid'),
+                            'updatedby'         => $this->session->userdata('userid')
+                        );
+                        $this->m_productout->save($param_out);
+                        if ($this->db->affected_rows() > 0) {
+                            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Data berhasil disimpan</div>');
+                                'Data berhasil disimpan</div>');
+                        }
+                        echo "<script>window.location='" . site_url('productout') . "';</script>";
                     }
-                    echo "<script>window.location='" . site_url('productout') . "';</script>";
                 } else {
                     if ($status == 'C') {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
@@ -154,7 +193,7 @@ class ProductOut extends CI_Controller {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
                             '</button>' .
-                            'Budget sudah melebihi : ' . rupiah($budgetProduct) . ' /Tahun </div>');
+                            'Budget Product sudah melebihi : ' . rupiah($budgetProduct) . ' /Tahun </div>');
                     } else if ($instituteOut > $budgetIns) {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
                             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
@@ -234,16 +273,17 @@ class ProductOut extends CI_Controller {
             $type_id = $product_detail->jenis_id;
             $budgetProduct = $product_detail->budget;
             $budget_detail = $this->m_budget->getBudget($type_id, $trxYear);
-            $sumProductOut = $this->m_productout->totalQtyProductOut(null, $product, $trxYear);
-            $sumInstituteOut = $this->m_productout->totalInstituteOut($institute, $trxYear);
+            $sumBudgetOut = $this->m_productout->totalBudgetProductOut($id_barang_out, $product, $trxYear);
+            $sumQtyOut = $this->m_productout->totalQtyProductOut($id_barang_out, $product, $trxYear);
+            $sumInstituteOut = $this->m_productout->totalInstituteOut($id_barang_out, $institute, $trxYear);
 
             if ($type_id == 2) {
                 $qtyOut = $qty = $unitprice = 0;
                 $amount = $budget;
                 $instituteOut = $budget + $sumInstituteOut->amount;
-                $budgetOut = $budget + $sumProductOut->amount;
+                $budgetOut = $budget + $sumBudgetOut->amount;
             } else {
-                $qtyOut = $qty + $sumProductOut->qtyentered;
+                $qtyOut = $qty + $sumQtyOut->qtyentered;
                 $amount = $total;
                 $instituteOut = $total + $sumInstituteOut->amount;
                 $budgetOut = $total;
@@ -255,27 +295,65 @@ class ProductOut extends CI_Controller {
                 $budgetYear = $budget_detail->tahun;
                 $status = $budget_detail->status;
                 if ($trxYear == $budgetYear && $status == 'O' && $budgetOut <= $budgetProduct && $instituteOut <= $budgetIns && $qtyOut <= $qtyAvailable) {
-                    $param_out = array(
-                        'documentno'        => $code,
-                        'datetrx'           => $datetrx,
-                        'tbl_barang_id'     => $product,
-                        'tbl_instansi_id'   => $institute,
-                        'qtyentered'        => $qty,
-                        'unitprice'         => $unitprice,
-                        'amount'            => $amount,
-                        'keterangan'        => $desc,
-                        'updated'           => date('Y-m-d H:i:s')
-                        
-                    );
-                    $where_out = array('tbl_barangkeluar_id' => $id_barang_out);
-                    $this->m_productout->update($param_out, $where_out);
-                    if ($this->db->affected_rows() > 0) {
-                        $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade in" role="alert">'.
-                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'.
-                            '</button>'.
-                            'Data berhasil diubah</div>');
+                    if ($_FILES['nodin_file_out']['name'] != null) {
+                        if ($this->upload->do_upload('nodin_file_out')) {
+                            $item = $this->m_productout->detail($id_barang_out)->row();
+                            if ($item->file != null) {
+                                $target = './upload/nodin/' . $item->file;
+                                unlink($target); //replace data lama
+                            }
+                            $file_name = $this->upload->data('file_name');
+                            $param_out = array(
+                                'documentno'        => $code,
+                                'datetrx'           => $datetrx,
+                                'tbl_barang_id'     => $product,
+                                'tbl_instansi_id'   => $institute,
+                                'qtyentered'        => $qty,
+                                'unitprice'         => $unitprice,
+                                'amount'            => $amount,
+                                'keterangan'        => $desc,
+                                'file'              => $file_name,
+                                'updatedby'         => $this->session->userdata('userid'),
+                                'updated'           => date('Y-m-d H:i:s')
+                                
+                            );
+                            $where_out = array('tbl_barangkeluar_id' => $id_barang_out);
+                            $this->m_productout->update($param_out, $where_out);
+                            if ($this->db->affected_rows() > 0) {
+                                $this->session->set_flashdata('msg','<div class="alert alert-success alert-dismissible fade in" role="alert">'.
+                                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>'.
+                                    '</button>'.
+                                    'Data berhasil diubah</div>');
+                            }
+                            echo "<script>window.location='".site_url('productout')."';</script>";
+                        } else {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            echo "<script>window.location='" . site_url('productout/edit/' . $id_barang_out) . "'</script>";
+                        }
+                    } else {
+                        $param_out = array(
+                            'documentno'        => $code,
+                            'datetrx'           => $datetrx,
+                            'tbl_barang_id'     => $product,
+                            'tbl_instansi_id'   => $institute,
+                            'qtyentered'        => $qty,
+                            'unitprice'         => $unitprice,
+                            'amount'            => $amount,
+                            'keterangan'        => $desc,
+                            'updatedby'         => $this->session->userdata('userid'),
+                            'updated'           => date('Y-m-d H:i:s')
+                        );
+                        $where_out = array('tbl_barangkeluar_id' => $id_barang_out);
+                        $this->m_productout->update($param_out, $where_out);
+                        if ($this->db->affected_rows() > 0) {
+                            $this->session->set_flashdata('msg', '<div class="alert alert-success alert-dismissible fade in" role="alert">' .
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                            '</button>' .
+                                'Data berhasil diubah</div>');
+                        }
+                        echo "<script>window.location='" . site_url('productout') . "';</script>";
                     }
-                    echo "<script>window.location='".site_url('productout')."';</script>";
                 } else {
                     if ($status == 'C') {
                         $this->session->set_flashdata('error', '<div class="alert alert-danger alert-dismissible fade in" role="alert">' .
@@ -326,6 +404,7 @@ class ProductOut extends CI_Controller {
         $nama_barang = $product->name;
         $nama_instansi = $instansi->name;
         $keterangan = $productout->keterangan;
+        $file_name = $productout->file;
         
         if ($qty_out == 0 && $product->jenis_id != 2) {
             $data = array('error_qty' => $qty_out);
@@ -336,6 +415,7 @@ class ProductOut extends CI_Controller {
             );
             $data_product = array(
                 'qtyavailable'  => $qtyAvailable - $qty_out,
+                'updatedby'     => $this->session->userdata('userid'),
                 'updated'       => date('Y-m-d H:i:s')
             );
             $dataApi = array(
@@ -344,12 +424,13 @@ class ProductOut extends CI_Controller {
                 'instansi'          => $nama_instansi,
                 'jumlah'            => $qty_out,
                 'tgl_barang_masuk'  => date("Y-m-d"),
-                'keterangan'        => $keterangan,
+                'keterangan'        => "Test",
                 'stat'              => 1,
+                'file'              => $file_name,
                 'key'               => "inv123"
             );
 
-            //Kirim data ke client
+            // Kirim data ke client
             $result = $this->m_productout->saveApi($dataApi);
             if ($result['status'] == true) {
                 $where_out = array('tbl_barangkeluar_id' => $id);
@@ -364,8 +445,19 @@ class ProductOut extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function download($file_name)
+    {
+        $url = 'upload/nodin/' . $file_name . '';
+        force_download($url, NULL);
+    }
+
     public function delete($id)
     {
+        $item = $this->m_productout->detail($id)->row();
+        if ($item->file != null) {
+            $target = './upload/nodin/' . $item->file;
+            unlink($target); //replace data lama
+        }
         $data = $this->m_productout->delete($id);
         echo json_encode($data);
     }
@@ -374,7 +466,8 @@ class ProductOut extends CI_Controller {
     {
         $data = $this->m_productout->invoicePOut($id);
         $trx = date("Y", strtotime($data->datetrx));
-        $value = $this->m_productout->totalInstituteYear($data->tbl_instansi_id, $trx);
+        $id = "rpt";
+        $value = $this->m_productout->totalInstituteOut($id, $data->tbl_instansi_id, $trx);
 
         // create new PDF document
         $pdf = new POPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -472,6 +565,11 @@ class ProductOut extends CI_Controller {
         $pdf->writeHTML($page_head, true, false, false, false, '');
 
         $pdf->SetXY(7, 50);
+        if ($data->status != 'CO') {
+            $remain = $data->budget_ins - $data->amount;
+        } else {
+            $remain = $data->budget_ins - $value->amount;
+        }
         $page_col = '<table border="1" style="width:100%">
             <tr align="center">
                 <th width="5%">No</th>
@@ -499,7 +597,7 @@ class ProductOut extends CI_Controller {
             </tr>
             <tr>
                 <td align="right" width="85%">Remaining Budget</td>
-                <td align="right">' . rupiah($data->budget_ins - $value->amount) . '</td>
+                <td align="right">' . rupiah($remain) . '</td>
             </tr>
         </table>';
 

@@ -18,8 +18,10 @@ class M_type extends CI_Model
 	{
 		$isactive = $this->input->post('istype');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
+		$this->value = $post['code_type'];
+		$this->name = $post['name_type'];
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {
@@ -32,8 +34,9 @@ class M_type extends CI_Model
 	{
 		$isactive = $this->input->post('istype');
 		$post = $this->input->post();
-		$this->value = $post['code'];
-		$this->name = $post['name'];
+		$this->updatedby = $this->session->userdata('userid');
+		$this->value = $post['code_type'];
+		$this->name = $post['name_type'];
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {

@@ -20,7 +20,7 @@
                   <th>Name</th>
                   <th>Type Logistics</th>
                   <th width="50px">Status</th>
-                  <th width="100px"></th>
+                  <th width="60px"></th>
                 </tr>
               </thead>
             </table>

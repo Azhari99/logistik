@@ -7,7 +7,6 @@ class Menu extends CI_Controller
     {
         parent::__construct();
         $this->load->model('m_menu');
-        // $this->load->model('m_submenu');
     }
 
     public function index()

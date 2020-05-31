@@ -25,11 +25,13 @@ class M_budget extends CI_Model
 	{
 		$isactive = $this->input->post('isbudget');
 		$post = $this->input->post();
-		$this->name = $post['name'];
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
+		$this->name = $post['name_budget'];
+		$this->jenis_id = $post['typelog_budget'];
 		$this->tahun = $post['year_budget'];
 		$this->budget = changeFormat($post['an_budget']);
-		$this->keterangan = $post['desc'];
-		$this->jenis_id = $post['typelog'];
+		$this->keterangan = $post['desc_budget'];
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {
@@ -47,11 +49,12 @@ class M_budget extends CI_Model
 	{
 		$isactive = $this->input->post('isbudget');
 		$post = $this->input->post();
-		$this->name = $post['name'];
+		$this->updatedby = $this->session->userdata('userid');
+		$this->name = $post['name_budget'];
+		$this->jenis_id = $post['typelog_budget'];
 		$this->tahun = $post['year_budget'];
 		$this->budget = changeFormat($post['an_budget']);
-		$this->keterangan = $post['desc'];
-		$this->jenis_id = $post['typelog'];
+		$this->keterangan = $post['desc_budget'];
 		if (isset($isactive)) {
 			$this->isactive = 'Y';
 		} else {
@@ -85,14 +88,14 @@ class M_budget extends CI_Model
 									FROM tbl_anggaran a
 									LEFT JOIN tbl_jenis_logistik jl ON jl.tbl_jenis_id = a.jenis_id
 									WHERE a.tahun = $post[year_budget]
-									AND a.jenis_id = $post[typelog]");
+									AND a.jenis_id = $post[typelog_budget]");
 		} else {
 			$sql = $this->db->query("SELECT count(a.jenis_id) as type,
 									jl.name
 									FROM tbl_anggaran a
 									LEFT JOIN tbl_jenis_logistik jl ON jl.tbl_jenis_id = a.jenis_id
 									WHERE a.tahun = $post[year_budget]
-									AND a.jenis_id = $post[typelog] 
+									AND a.jenis_id = $post[typelog_budget] 
 									AND a.tbl_anggaran_id != $post[id_budget]");
 		}
 		return $sql->row();
@@ -112,7 +115,7 @@ class M_budget extends CI_Model
 		$this->db->select_sum('budget');
 		$sql = $this->db->get_where($this->_table, array(
 			'tahun' =>  $currentYear
-		));
+		));		
 		return $sql->row();
 	}
 
@@ -120,8 +123,8 @@ class M_budget extends CI_Model
 	{
 		$currentYear = date('Y');
 		$sql = $this->db->query("SELECT sum(a.budget) as total_budget
-									FROM tbl_anggaran a
-									WHERE a.tahun = $currentYear ");
+								FROM tbl_anggaran a
+								WHERE a.tahun = $currentYear ");
 		return $sql->row();
 	}
 

@@ -13,6 +13,8 @@ class M_menu extends CI_Model
 	{
 		$isactive = $this->input->post('ismenu');
 		$post = $this->input->post();
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
 		$this->name = $post['name_menu'];
 		$this->seqno = $post['line_menu'];
 		$this->url = $post['url_menu'];
@@ -34,6 +36,7 @@ class M_menu extends CI_Model
 	{
 		$isactive = $this->input->post('ismenu');
 		$post = $this->input->post();
+		$this->updatedby = $this->session->userdata('userid');
 		$this->name = $post['name_menu'];
 		$this->seqno = $post['line_menu'];
 		$this->url = $post['url_menu'];

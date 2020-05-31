@@ -10,7 +10,7 @@ class M_productout extends CI_Model
 	public function __construct()
 	{
 		$this->_client = new Client([
-			'base_uri'  => 'http://localhost/rest-api/wpu-rest-server-client/projectinventory/api/'
+			'base_uri'  => 'http://localhost/rest-api/wpu-rest-client/projectinventory/api/'
 		]);
 	}
 
@@ -23,6 +23,7 @@ class M_productout extends CI_Model
 							tbl_barangkeluar.qtyentered,
 							tbl_barangkeluar.amount,
 							tbl_barangkeluar.keterangan,
+							tbl_barangkeluar.file,
 							tbl_barangkeluar.created,
 							tbl_barang.value,
 							tbl_barang.name,							
@@ -95,56 +96,55 @@ class M_productout extends CI_Model
 		return $firstCode . $separtor . $lastCode;
 	}
 
-	public function totalQtyProduct($id, $datetrx)
+	public function totalQtyProductOut($id_pout, $id_product, $datetrx)
 	{
-		$param = array(
-			'tbl_barang_id' => $id,
-			'DATE_FORMAT(datetrx, "%Y") =' => $datetrx
-		);
 		$this->db->select_sum('qtyentered');
-		$this->db->where($param);
 		$this->db->from($this->_table);
+		$param = array(
+			'tbl_barang_id'					=> $id_product,
+			'DATE_FORMAT(datetrx, "%Y") ='	=> $datetrx,
+			'status'						=> 'DR'
+		);
+		$this->db->where($param);
+		if (!empty($id_pout)) {
+			$this->db->where('tbl_barangkeluar_id !=', $id_pout);
+		}
 		return $this->db->get()->row();
 	}
 
-	public function totalInstituteOut($id_institute, $datetrx)
+	public function totalInstituteOut($id_pout, $id_institute, $datetrx)
 	{
-		$sql = $this->db->query("SELECT sum(bk.amount) as amount
-								FROM tbl_barangkeluar bk
-								WHERE bk.tbl_instansi_id = $id_institute
-								AND YEAR(bk.datetrx) = $datetrx");
-		return $sql->row();
-	}
-
-	public function totalQtyProductOut($id, $id_product, $datetrx)
-	{
-		if ($id == null) {
-			$sql = $this->db->query("SELECT sum(bk.amount) as amount,
-									sum(bk.qtyentered) as qtyentered
-									FROM tbl_barangkeluar bk
-									WHERE bk.tbl_barang_id = $id_product
-									AND YEAR(bk.datetrx) = $datetrx");
-		} else {
-			$sql = $this->db->query("SELECT sum(bk.amount) as amount,
-									sum(bk.qtyentered) as qtyentered
-									FROM tbl_barangkeluar bk
-									WHERE bk.tbl_barang_id = $id_product
-									AND YEAR(bk.datetrx) = $datetrx
-									AND bk.tbl_barangkeluar != $id ");
+		$this->db->select_sum('amount');
+		$this->db->from($this->_table);
+		$this->db->where('tbl_instansi_id', $id_institute)
+				->where("DATE_FORMAT(datetrx, '%Y') =", $datetrx);				
+		if (!empty($id_pout)) {
+			$this->db->where('tbl_barangkeluar_id !=', $id_pout);
 		}
-		return $sql->row();
+
+		if ($id_pout == "rpt") { //jika id value string rpt (report)
+			$this->db->where('status', 'CO');
+		}
+		$sql = $this->db->get()->row();
+		return $sql;
 	}
 
-	public function totalInstituteYear($institute, $datetrx)
+	public function totalBudgetProductOut($id_pout, $id_product, $datetrx)
 	{
-		$sql = $this->db->query("SELECT sum(bk.amount) as amount
-									FROM tbl_barangkeluar bk
-									WHERE YEAR(bk.datetrx) = $datetrx
-									AND bk.tbl_instansi_id = $institute
-									AND bk.status = 'CO'");
-		return $sql->row();
+		$this->db->select_sum('amount');
+		$this->db->from($this->_table);
+		$param = array(
+			'tbl_barang_id'					=> $id_product,
+			'DATE_FORMAT(datetrx, "%Y") ='	=> $datetrx
+			// 'status'						=> 'CO'
+		);
+		$this->db->where($param);
+		if (!empty($id_pout)) {
+			$this->db->where('tbl_barangkeluar_id !=', $id_pout);
+		}
+		return $this->db->get()->row();
 	}
-	//Fazmi
+
 	public function invoicePOut($id)
 	{
 		$sql = $this->db->query("SELECT bk.tbl_barangkeluar_id,

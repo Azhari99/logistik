@@ -8,10 +8,10 @@ class Auth extends CI_Controller {
         $this->load->model('m_users');
     }
 
-    public function login() 
+    public function index() 
     {
         isLogin();
-    	$this->load->view('vLogin');
+    	$this->load->view('auth/vLogin');
     }
 
     public function process()
@@ -27,7 +27,7 @@ class Auth extends CI_Controller {
             } else {
                 echo "<script>
                     alert('Login gagal, username / password salah');
-                    window.location = '" . site_url('auth/login') . "';
+                    window.location = '" . site_url('auth') . "';
                 </script>";
             }
         }
@@ -37,6 +37,6 @@ class Auth extends CI_Controller {
     {
         $params = array('userid', 'username', 'name', 'level');
         $this->session->unset_userdata($params);
-        redirect('auth/login');
+        redirect('auth');
     }
 }

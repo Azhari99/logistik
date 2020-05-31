@@ -21,6 +21,8 @@ class M_submenu extends CI_Model
 	{
 		$isactive = $this->input->post('issub');
 		$post = $this->input->post();
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
 		$this->name = $post['name_sub'];
 		$this->tbl_menu_id = $post['menu_id'];
 		$this->seqno = $post['line_sub'];
@@ -42,6 +44,7 @@ class M_submenu extends CI_Model
 	{
 		$isactive = $this->input->post('issub');
 		$post = $this->input->post();
+		$this->updatedby = $this->session->userdata('userid');
 		$this->name = $post['name_sub'];
 		$this->tbl_menu_id = $post['menu_id'];
 		$this->seqno = $post['line_sub'];
@@ -60,13 +63,5 @@ class M_submenu extends CI_Model
 	public function delete($id)
 	{
 		return $this->db->delete($this->_table, array('tbl_submenu_id' => $id));
-	}
-
-	public function seqno()
-	{
-		$this->db->select('(count(tbl_menu_id)+1) as no');
-		$this->db->from($this->_table);
-		$query = $this->db->get()->row();
-		return $query;
 	}
 }

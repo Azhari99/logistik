@@ -38,7 +38,7 @@ class Category extends CI_Controller {
                 $row[] = '<center><span class="label label-danger">Nonaktif</span></center>';
             }
             $row[] = '<center>            
-            <a class="btn btn-primary btn-xs" href="category/edit/'.$value->tbl_kategori_id.'" title="Edit"><i class="fa fa-edit"></i></a>
+            <a class="btn btn-primary btn-xs" href="category/edit/'.$value->tbl_kategori_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
             <a class="btn btn-danger btn-xs"  onclick="deleteCategory('."'".$value->tbl_kategori_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             </center>';
             $data[] = $row;
@@ -70,7 +70,7 @@ class Category extends CI_Controller {
 
     public function actAdd()
     {
-        $this->form_validation->set_rules('name','name', 
+        $this->form_validation->set_rules('name_cat','name', 
                                         'required|is_unique[tbl_kategori.name]',
                                         array(
                                             'is_unique' => 'This %s already exists.'
@@ -97,7 +97,7 @@ class Category extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_kategori');
-        $this->form_validation->set_rules('name','name','required');
+        $this->form_validation->set_rules('name_cat','name','required');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 

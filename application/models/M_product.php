@@ -20,10 +20,12 @@ class M_product extends CI_Model
 							tbl_barang.qtyavailable,
 							tbl_barang.qtyentered,
 							tbl_barang.unitprice,
-							tbl_barang.budget');
+							tbl_barang.budget,
+							tbl_user.name as user');
 		$this->db->from($this->_table);
 		$this->db->join('tbl_jenis_logistik', 'tbl_jenis_logistik.tbl_jenis_id = '.$this->_table.'.jenis_id', 'Left');
 		$this->db->join('tbl_kategori', 'tbl_kategori.tbl_kategori_id = '.$this->_table.'.kategori_id', 'Left');
+		$this->db->join('tbl_user', 'tbl_user.tbl_user_id = '.$this->_table.'.createdby', 'Left');
 		$query = $this->db->get()->result();
 		return $query;
 	}
@@ -32,25 +34,27 @@ class M_product extends CI_Model
 	{
 		$isactive = $this->input->post('isproduct');
 		$post = $this->input->post();
-		$type_id = $post['typelog'];
-		$this->value = $post['code'];
-		$this->name = $post['name'];		
-		$this->keterangan = $post['desc'];	
+		$this->createdby = $this->session->userdata('userid');
+		$this->updatedby = $this->session->userdata('userid');
+		$type_id = $post['typelog_product'];
+		$this->value = $post['code_product'];
+		$this->name = $post['name_product'];		
+		$this->keterangan = $post['desc_product'];	
 		$this->jenis_id = $type_id;	
-		$this->kategori_id = $post['category'];	
+		$this->kategori_id = $post['category_product'];	
         if (isset($isactive)) {
             $this->isactive = 'Y';
         } else {
             $this->isactive = 'N';
         }
         if ($type_id != 2) {
-        	$this->qtyentered = $post['qty'];
-        	$this->unitprice = changeFormat($post['unitprice']);
+        	$this->qtyentered = $post['qty_product'];
+        	$this->unitprice = changeFormat($post['unitprice_product']);
         } else {
         	$this->qtyentered = 0;
         	$this->unitprice = 0;
         }
-        $this->budget = changeFormat($post['budget']);
+        $this->budget = changeFormat($post['budget_product']);
 		$this->db->insert($this->_table, $this);
 	}
 
@@ -194,9 +198,10 @@ class M_product extends CI_Model
 		return $sql->row();
 	}
 
-	public function listProductOut($id, $start, $end)
+	public function listProductOut($options, $id, $start, $end)
 	{
-		$this->db->select('b.value,
+		$this->db->select('b.tbl_barang_id,
+							b.value,
 							b.name,
 							bm.documentno,
 							bm.datetrx,
@@ -206,13 +211,21 @@ class M_product extends CI_Model
 							bm.keterangan');
 		$this->db->from('tbl_barang b');
 		$this->db->join('tbl_barangmasuk bm', 'bm.tbl_barang_id = b.tbl_barang_id', 'LEFT');
-		$this->db->where('bm.datetrx BETWEEN "'.$start.'"AND"'.$end.'"');		
-		if ($id != NULL) {
-			$this->db->where('b.tbl_barang_id', $id);
+		$this->db->where('bm.datetrx BETWEEN "'.$start.'"AND"'.$end.'"')
+				->where('bm.status', 'CO');
+		if ($options == "product" && !empty($id)) {
+			$this->db->where('bm.tbl_barang_id', $id);
+		} else if ($options == "category" && !empty($id)) {
+			$this->db->where('b.kategori_id', $id);
+		} else {
+			if (!empty($id)) {
+				$this->db->where('b.jenis_id', $id);
+			}
 		}
 		$sql_1 = $this->db->get_compiled_select();
 
-		$this->db->select('b.value,
+		$this->db->select('b.tbl_barang_id,
+							b.value,
 							b.name,
 							bk.documentno,
 							bk.datetrx,
@@ -223,49 +236,47 @@ class M_product extends CI_Model
 		$this->db->from('tbl_barang b');
 		$this->db->join('tbl_barangkeluar bk', 'bk.tbl_barang_id = b.tbl_barang_id', 'LEFT');
 		$this->db->where('bk.datetrx BETWEEN "' . $start . '"AND"' . $end . '"')
-				->where('b.jenis_id', 2);
-		if ($id != NULL) {
-			$this->db->where('b.tbl_barang_id', $id);
+				->where('bk.status', 'CO');
+		if ($options == "product") {
+			if (!empty($id)) {
+				$this->db->where('bk.tbl_barang_id', $id);
+			}
+			$this->db->where('b.jenis_id', 2);
+		} else if ($options == "institute" && !empty($id)) {
+			$this->db->where('bk.tbl_instansi_id', $id);
+		} else if ($options == "category" && !empty($id)) {
+			$this->db->where('b.kategori_id', $id);
+		} else {
+			if (!empty($id)) {
+				$this->db->where('b.jenis_id', $id);
+			}
 		}
 		$sql_2 = $this->db->get_compiled_select();
-		
-		$query = $this->db->query($sql_1 . ' UNION ALL ' . $sql_2);
-		return $query->result();
-	}
 
-	public function InstituteProductOut($id, $start, $end)
-	{
-		$this->db->select('b.value,
+		$this->db->select('b.tbl_barang_id,
+							b.value,
 							b.name,
-							bk.datetrx,
-							bk.qtyentered as QTY,
-							bk.amount as amount');
-		$this->db->from('tbl_barang b');
-		$this->db->join('tbl_barangkeluar bk', 'bk.tbl_barang_id = b.tbl_barang_id', 'LEFT');
-		$this->db->where('bk.datetrx BETWEEN "'.$start.'"AND"'.$end.'"');	
-		if ($id != NULL) {
-			$this->db->where('bk.tbl_instansi_id', $id);
-		}
-		//$this->db->group_by('b.value', 'b.name', 'bk.datetrx');
-
-		$sql_1 = $this->db->get_compiled_select();
-
-		$this->db->select('b.value,
-							b.name,
+							p.documentno,
 							p.datetrx,
-							p.qtyentered as QTY,
-							p.amount as amount');
+							p.qtyentered,
+							p.unitprice,
+							p.amount,
+							p.keterangan');
 		$this->db->from('tbl_barang b');
 		$this->db->join('tbl_permintaan p', 'p.tbl_barang_id = b.tbl_barang_id', 'LEFT');
-		$this->db->where('p.datetrx BETWEEN "' . $start . '"AND"' . $end . '"');
-		if ($id != NULL) {
-			$this->db->where('p.tbl_instansi_id', $id);
+		$this->db->where('p.datetrx BETWEEN "' . $start . '"AND"' . $end . '"')
+				->where('p.status', 'CO');
+		if ($options == "product" && !empty($id)) {
+			$this->db->where('p.tbl_barang_id', $id);
+		} else if ($options == "category" && !empty($id)) {
+			$this->db->where('b.kategori_id', $id);
+		} else {
+			if (!empty($id)) {
+				$this->db->where('b.jenis_id', $id);
+			}
 		}
-		//$this->db->group_by('b.value', 'b.name', 'p.datetrx');
-		
-		$sql_2 = $this->db->get_compiled_select();
-		
-		$query = $this->db->query($sql_1 . ' UNION ALL ' . $sql_2);
+		$sql_3 = $this->db->get_compiled_select();
+		$query = $this->db->query($sql_1 . ' UNION ALL ' .$sql_2 . ' UNION ALL ' . $sql_3);
 		return $query->result();
 	}
 }

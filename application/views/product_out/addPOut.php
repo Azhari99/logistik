@@ -62,7 +62,7 @@
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="qty_out">Quantity
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
-                  <input type="number" class="form-control col-md-3 col-xs-12" id="qty_out" name="qty_out">
+                  <input type="number" class="form-control col-md-3 col-xs-12" id="qty_out" name="qty_out" value="0">
                 </div>
               </div>
               <div class="item form-group" id="unitgroup_out">
@@ -91,6 +91,14 @@
                 </label>
                 <div class="col-md-3 col-sm-3 col-xs-12">
                   <textarea class="form-control col-md-7 col-xs-12" id="desc_out" name="desc_out"></textarea>
+                </div>
+              </div>
+              <div class="item form-group">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="nodin_file_out">File Nodin Barang Keluar
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <input type="file" class="control-label" id="nodin_file_out" name="nodin_file_out">
+                  <small>(Maksimal Upload 5Mb)</small>
                 </div>
               </div>
               <div class="ln_solid"></div>

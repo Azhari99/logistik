@@ -45,7 +45,7 @@ class Product extends CI_Controller {
             $row[] = rupiah($value->budget - $budgetOut->budget_out);
             $row[] = rupiah($value->budget);
             $row[] = $value->keterangan;
-            $row[] = $value->createdby;
+            $row[] = $value->user;
             
             if($value->isactive == 'Y'){
                 $row[] = '<center><span class="label label-success">Aktif</span></center>';
@@ -76,17 +76,17 @@ class Product extends CI_Controller {
     public function actAdd()
     {
         $post = $this->input->post();
-        $this->form_validation->set_rules('name','name', 
+        $this->form_validation->set_rules('name_product','name', 
                                         'required|is_unique[tbl_barang.name]',
                                         array(
                                             'is_unique' => 'This %s already exists.'
                                         ));
-        $this->form_validation->set_rules('typelog', 'type logistics', 'required');
-        $this->form_validation->set_rules('budget', 'budget', 'required');
+        $this->form_validation->set_rules('typelog_product', 'type logistics', 'required');
+        $this->form_validation->set_rules('budget_product', 'budget', 'required');
 
-        if ($post['typelog'] != 2) { //jika tipe logistik bukan anggaran
-            $this->form_validation->set_rules('qty', 'limit qty', 'required');
-            $this->form_validation->set_rules('unitprice', 'unit price', 'required');
+        if ($post['typelog_product'] != 2) { //jika tipe logistik bukan anggaran
+            $this->form_validation->set_rules('qty_product', 'limit qty', 'required');
+            $this->form_validation->set_rules('unitprice_product', 'unit price', 'required');
         }
         
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
@@ -95,15 +95,16 @@ class Product extends CI_Controller {
             $data['type'] = $this->m_type->listType();
             $data['code'] = $this->m_product->generateCode();
             $this->template->load('overview', 'product/addProduct', $data);
+            
         } else {
             $currentYear = date('Y');
-            $budget_detail = $this->m_budget->getBudget($post['typelog'], $currentYear);
-            $typeProduct = $this->m_product->totalTypeBudget(null, $post['typelog']);
+            $budget_detail = $this->m_budget->getBudget($post['typelog_product'], $currentYear);
+            $typeProduct = $this->m_product->totalTypeBudget(null, $post['typelog_product']);
             if ($budget_detail != null) { //cek set budget in master budget
                 $annBudget = $budget_detail->budget;
                 $status = $budget_detail->status;
                 $year = $budget_detail->tahun;
-                $budgetProduct = (changeFormat($post['budget']) + $typeProduct->typebudget_total);
+                $budgetProduct = (changeFormat($post['budget_product']) + $typeProduct->typebudget_total);
                 if ($budgetProduct <= $annBudget && $status == 'O') {
                     $this->m_product->save();
                     if ($this->db->affected_rows() > 0) {
@@ -155,25 +156,26 @@ class Product extends CI_Controller {
         $data = $this->m_product->detail($product_id)->result();
         echo json_encode($data);
     }
+
     public function actEdit()
     {
         $id_barang = $this->input->post('id_barang');
         $isactive = $this->input->post('isproduct');
-        $code = $this->input->post('code');
-        $name = $this->input->post('name');
-        $desc = $this->input->post('desc');
-        $category = $this->input->post('category');
-        $typelog = $this->input->post('typelog');
-        $qty = $this->input->post('qty');
-        $unitprice = $this->input->post('unitprice');
-        $budget = $this->input->post('budget');
+        $code = $this->input->post('code_product');
+        $name = $this->input->post('name_product');
+        $desc = $this->input->post('desc_product');
+        $category = $this->input->post('category_product');
+        $typelog = $this->input->post('typelog_product');
+        $qty = $this->input->post('qty_product');
+        $unitprice = $this->input->post('unitprice_product');
+        $budget = $this->input->post('budget_product');
 
-        $this->form_validation->set_rules('name','name','required');
-        $this->form_validation->set_rules('typelog', 'type logistics', 'required');
-        $this->form_validation->set_rules('budget', 'budget', 'required');
+        $this->form_validation->set_rules('name_product','name','required');
+        $this->form_validation->set_rules('typelog_product', 'type logistics', 'required');
+        $this->form_validation->set_rules('budget_product', 'budget', 'required');
         if ($typelog != 2) {
-            $this->form_validation->set_rules('qty', 'limit qty', 'required');
-            $this->form_validation->set_rules('unitprice', 'unit price', 'required');
+            $this->form_validation->set_rules('qty_product', 'limit qty', 'required');
+            $this->form_validation->set_rules('unitprice_product', 'unit price', 'required');
         }
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 
@@ -203,11 +205,12 @@ class Product extends CI_Controller {
                         $isactive = 'N';
                     }
                     if ($typelog == 2) {
-                        $qty = 0;
+                        $qty = $unitprice = 0;
                     }
                     $param = array(
                         'value'         => $code,
                         'name'          => $name,
+                        'updatedby'     => $this->session->userdata('userid'),
                         'keterangan'    => $desc,
                         'jenis_id'      => $typelog,
                         'kategori_id'   => $category,

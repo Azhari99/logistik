@@ -131,7 +131,6 @@
 	}
 
 	function completeProductOut(id) {
-		console.log(id);
 		if (confirm("Apakah data akan di complete ?")) {
 			$.ajax({
 				url: '<?php echo site_url('productout/actComplete/') ?>' + id,

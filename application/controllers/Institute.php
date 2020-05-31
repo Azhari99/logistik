@@ -34,9 +34,9 @@ class Institute extends CI_Controller {
                 $row[] = '<center><span class="label label-danger">Nonaktif</span></center>';
             }
             $row[] = '<center>            
-            <a class="btn btn-primary btn-xs" href="institute/edit/'.$value->tbl_instansi_id.'" title="Edit"><i class="fa fa-edit"></i></a>
-            <a class="btn btn-danger btn-xs"  onclick="deleteInstitute('."'".$value->tbl_instansi_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
+            <a class="btn btn-primary btn-xs" href="institute/edit/'.$value->tbl_instansi_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
             </center>';
+            // <a class="btn btn-danger btn-xs"  onclick="deleteInstitute('."'".$value->tbl_instansi_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             $data[] = $row;
         }
         $result = array('data' => $data );
@@ -51,9 +51,9 @@ class Institute extends CI_Controller {
 
     public function actAdd()
     {   
-        $this->form_validation->set_rules('name','name', 'required|is_unique[tbl_instansi.name]');
-        $this->form_validation->set_rules('address','address', 'required');
-        $this->form_validation->set_rules('email','email', 'required|valid_email|is_unique[tbl_instansi.email]');
+        $this->form_validation->set_rules('name_ins','name', 'required|is_unique[tbl_instansi.name]');
+        $this->form_validation->set_rules('address_ins','address', 'required');
+        $this->form_validation->set_rules('email_ins','email', 'required|valid_email|is_unique[tbl_instansi.email]');
 
         $this->form_validation->set_message('is_unique', 'This %s already exists.');
 
@@ -80,10 +80,18 @@ class Institute extends CI_Controller {
                 }
                 echo "<script>window.location='".site_url('institute')."';</script>";
             } else {
-                $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
-                    '</button>' .
-                    'Anggaran pada tahun '.$currentYear. ' sudah melebihi total anggaran sebesar : '. rupiah($annBudget) . '</div>');
+                if ($annBudget != '') {
+                    $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                        '</button>' .
+                        'Anggaran pada tahun '.$currentYear. ' sudah melebihi total anggaran sebesar : '. rupiah($annBudget) . '</div>');
+                    
+                } else {
+                    $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                        '</button>' .
+                        'Anggaran pada tahun ' . $currentYear . ' tidak tersedia </div>');
+                }
                 echo "<script>window.location='" . site_url('institute/add') . "';</script>";
             }            
         }
@@ -105,9 +113,9 @@ class Institute extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_instansi');
-        $this->form_validation->set_rules('name', 'name', 'required');
-        $this->form_validation->set_rules('address', 'address', 'required');
-        $this->form_validation->set_rules('email', 'email', 'required|valid_email');
+        $this->form_validation->set_rules('name_ins', 'name', 'required');
+        $this->form_validation->set_rules('address_ins', 'address', 'required');
+        $this->form_validation->set_rules('email_ins', 'email', 'required|valid_email');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 
@@ -132,10 +140,17 @@ class Institute extends CI_Controller {
                 }
                 echo "<script>window.location='".site_url('institute')."';</script>";
             } else {
-                $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
-                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
-                    '</button>' .
-                    'Anggaran pada tahun ' . $currentYear . ' sudah melebihi total anggaran sebesar : ' . rupiah($annBudget) . '</div>');
+                if ($annBudget != '') {
+                    $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                        '</button>' .
+                        'Anggaran pada tahun ' . $currentYear . ' sudah melebihi total anggaran sebesar : ' . rupiah($annBudget) . '</div>');
+                } else {
+                    $this->session->set_flashdata('error', '<div class="alert alert-error alert-dismissible fade in" role="alert">' .
+                        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>' .
+                        '</button>' .
+                        'Anggaran pada tahun ' . $currentYear . ' tidak tersedia </div>');
+                }
                 echo "<script>window.location='" . site_url('institute/edit/'.$id) . "';</script>";
             }
         }

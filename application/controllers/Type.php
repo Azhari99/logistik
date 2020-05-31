@@ -29,9 +29,9 @@ class Type extends CI_Controller {
                 $row[] = '<center><span class="label label-danger">Nonaktif</span></center>';
             }
             $row[] = '<center>            
-            <a class="btn btn-primary btn-xs" href="type/edit/'.$value->tbl_jenis_id.'" title="Edit"><i class="fa fa-edit"></i></a>
-            <a class="btn btn-danger btn-xs"  onclick="deleteType('."'".$value->tbl_jenis_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
+            <a class="btn btn-primary btn-xs" href="type/edit/'.$value->tbl_jenis_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
             </center>';
+            // <a class="btn btn-danger btn-xs"  onclick="deleteType('."'".$value->tbl_jenis_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             $data[] = $row;
         }
         $result = array('data' => $data );
@@ -59,7 +59,7 @@ class Type extends CI_Controller {
 
     public function actAdd()
     {   
-        $this->form_validation->set_rules('name','name', 
+        $this->form_validation->set_rules('name_type','name', 
                                         'required|is_unique[tbl_jenis_logistik.name]',
                                         array(
                                             'is_unique' => 'This %s already exists.'
@@ -85,7 +85,7 @@ class Type extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_jenis');
-        $this->form_validation->set_rules('name','name','required');
+        $this->form_validation->set_rules('name_type','name','required');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 
