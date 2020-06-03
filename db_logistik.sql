@@ -81,11 +81,11 @@ CREATE TABLE `tbl_barang` (
   `unitprice` int(11) NOT NULL,
   `budget` bigint(20) NOT NULL,
   PRIMARY KEY (`tbl_barang_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_barang` */
 
-insert  into `tbl_barang`(`tbl_barang_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`jenis_id`,`kategori_id`,`keterangan`,`qtyentered`,`qtyavailable`,`unitprice`,`budget`) values (1,'Y','2020-05-13 14:20:56',1,'2020-05-13 14:21:08',1,'PS0001','BUKU',1,1,'TEST 1',200,0,8000,20000000),(2,'Y','2020-05-13 14:31:26',1,'2020-05-13 16:23:24',1,'PS0002','KOMPUTER',1,4,'TEST 2',100,7,1000000,35000000),(3,'Y','2020-05-13 14:31:51',1,'2020-05-13 16:23:07',1,'PS0003','DANA',2,3,'TEST 3',0,0,0,40000000),(4,'Y','2020-05-13 14:50:01',1,'2020-05-13 14:50:01',1,'PS0004','PULPEN',1,1,'TEST 3',100,0,3000,1000000);
+insert  into `tbl_barang`(`tbl_barang_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`jenis_id`,`kategori_id`,`keterangan`,`qtyentered`,`qtyavailable`,`unitprice`,`budget`) values (1,'Y','2020-06-01 00:41:14',1,'2020-06-01 02:31:26',1,'PS0001','KOMPUTER',1,1,'New Product',200,7,1000000,40000000);
 
 /*Table structure for table `tbl_barangkeluar` */
 
@@ -107,12 +107,13 @@ CREATE TABLE `tbl_barangkeluar` (
   `unitprice` int(11) NOT NULL,
   `amount` bigint(20) NOT NULL,
   `keterangan` varchar(255) NOT NULL,
+  `file` varchar(500) NOT NULL,
   PRIMARY KEY (`tbl_barangkeluar_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_barangkeluar` */
 
-insert  into `tbl_barangkeluar`(`tbl_barangkeluar_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`documentno`,`tbl_barang_id`,`tbl_instansi_id`,`datetrx`,`status`,`qtyentered`,`unitprice`,`amount`,`keterangan`) values (1,'Y','2020-05-13 15:18:21',1,'2020-05-13 16:23:07',1,'POT-0001',3,2,'2020-05-13','CO',0,0,10000000,'TEST 1'),(2,'Y','2020-05-13 15:18:43',1,'2020-05-13 16:23:24',1,'POT-0002',2,2,'2020-05-13','CO',12,1000000,96000,'TEST 2'),(3,'Y','2020-05-15 12:20:42',1,'2020-05-15 12:20:42',1,'POT-0003',1,2,'2020-05-15','DR',0,8000,0,'');
+insert  into `tbl_barangkeluar`(`tbl_barangkeluar_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`documentno`,`tbl_barang_id`,`tbl_instansi_id`,`datetrx`,`status`,`qtyentered`,`unitprice`,`amount`,`keterangan`,`file`) values (1,'Y','2020-06-01 00:44:09',1,'2020-06-01 01:14:21',1,'POT-0001',1,2,'2020-06-01','CO',1,1000000,2000000,'Test 2','item_200601_004409_87b79f263e.pdf'),(2,'Y','2020-06-01 00:47:42',1,'2020-06-01 02:31:26',1,'POT-0002',1,2,'2020-06-01','CO',8,5000000,40000000,'',''),(4,'Y','2020-06-01 00:58:58',1,'2020-06-01 01:28:16',1,'POT-0003',1,2,'2020-06-01','CO',1,5000000,5000000,'','item_200601_005858_d1942b48f0.pdf');
 
 /*Table structure for table `tbl_barangmasuk` */
 
@@ -135,11 +136,11 @@ CREATE TABLE `tbl_barangmasuk` (
   `keterangan` varchar(255) NOT NULL,
   `file` varchar(500) NOT NULL,
   PRIMARY KEY (`tbl_barangmasuk_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_barangmasuk` */
 
-insert  into `tbl_barangmasuk`(`tbl_barangmasuk_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`documentno`,`datetrx`,`tbl_barang_id`,`qtyentered`,`unitprice`,`amount`,`status`,`keterangan`,`file`) values (1,'Y','2020-05-13 14:55:31',1,'2020-05-13 14:56:11',1,'PIN-0001','2020-05-13 00:00:00',2,20,1000000,20000000,'CO','test data','item-200513-ec33021f3c.pdf'),(2,'Y','2020-05-15 15:26:02',1,'2020-05-15 15:26:02',1,'PIN-0002','2020-05-15 00:00:00',1,10,8000,80000,'DR','test 2','item-200515-268a4c6a7c.pdf');
+insert  into `tbl_barangmasuk`(`tbl_barangmasuk_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`documentno`,`datetrx`,`tbl_barang_id`,`qtyentered`,`unitprice`,`amount`,`status`,`keterangan`,`file`) values (1,'Y','2020-06-01 00:43:19',1,'2020-06-01 00:43:19',1,'PIN-0001','2020-06-01 00:00:00',1,20,1000000,20000000,'CO','Test 1','item_200601_004319_caeebb7564.pdf'),(2,'Y','2020-06-01 00:46:56',1,'2020-06-01 00:46:56',1,'PIN-0002','2020-06-01 00:00:00',1,1,2000000,2000000,'CO','Test 1',''),(5,'Y','2020-06-02 15:18:00',1,'2020-06-02 15:18:00',1,'PIN-0003','2020-06-02 00:00:00',1,1,1000000,1000000,'DR','','item_200602_151800_559046474b.pdf');
 
 /*Table structure for table `tbl_instansi` */
 
@@ -159,11 +160,11 @@ CREATE TABLE `tbl_instansi` (
   `phone` varchar(20) NOT NULL,
   `budget` bigint(20) NOT NULL,
   PRIMARY KEY (`tbl_instansi_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_instansi` */
 
-insert  into `tbl_instansi`(`tbl_instansi_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`address`,`email`,`phone`,`budget`) values (2,'Y','2020-05-13 12:59:52',1,'2020-05-13 13:00:18',1,'IS0001','ITB','Jl. Test 1 Jl. Test 1 Jl. Test 1','itb@ac.id','02410102020',20000000);
+insert  into `tbl_instansi`(`tbl_instansi_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`address`,`email`,`phone`,`budget`) values (2,'Y','2020-05-13 12:59:52',1,'2020-05-31 20:52:31',1,'IS0001','ITB','Jl. Test 1 Jl. Test 1 Jl. Test 1','itb@ac.id','02410102020',50000000),(3,'Y','2020-05-30 13:07:49',1,'2020-05-30 13:07:49',1,'IS0002','UI','Jl. Cacing','ui@ac.id','02410102020',60000000);
 
 /*Table structure for table `tbl_jenis_logistik` */
 
@@ -201,11 +202,11 @@ CREATE TABLE `tbl_kategori` (
   `isdefault` char(1) NOT NULL DEFAULT 'N',
   `jenis_id` int(10) NOT NULL,
   PRIMARY KEY (`tbl_kategori_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_kategori` */
 
-insert  into `tbl_kategori`(`tbl_kategori_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`isdefault`,`jenis_id`) values (1,'Y','2020-05-13 13:31:07',1,'2020-05-13 13:31:07',1,'CA0001','ATK','N',1),(2,'Y','2020-05-13 13:31:13',1,'2020-05-13 13:31:13',1,'CA0002','DOKUMEN','N',1),(3,'Y','2020-05-13 13:32:07',1,'2020-05-13 13:32:07',1,'CA0003','UANG','N',2),(4,'Y','2020-05-13 13:32:17',1,'2020-05-13 14:21:37',1,'CA0004','ELEKTRONIK','N',1);
+insert  into `tbl_kategori`(`tbl_kategori_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`isdefault`,`jenis_id`) values (1,'Y','2020-05-13 13:31:07',1,'2020-05-13 13:31:07',1,'CA0001','ATK','N',1),(2,'Y','2020-05-13 13:31:13',1,'2020-05-13 13:31:13',1,'CA0002','DOKUMEN','N',1),(3,'Y','2020-05-13 13:32:07',1,'2020-05-13 13:32:07',1,'CA0003','UANG','N',2);
 
 /*Table structure for table `tbl_menu` */
 
@@ -250,9 +251,11 @@ CREATE TABLE `tbl_permintaan` (
   `amount` bigint(20) NOT NULL,
   `keterangan` varchar(255) NOT NULL,
   PRIMARY KEY (`tbl_permintaan_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_permintaan` */
+
+insert  into `tbl_permintaan`(`tbl_permintaan_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`documentno`,`tbl_barang_id`,`tbl_instansi_id`,`datetrx`,`status`,`qtyentered`,`unitprice`,`amount`,`keterangan`) values (1,'Y','2020-06-01 02:46:00',0,'2020-06-01 02:46:00',0,'POT-2004',1,2,'2020-06-01','CO',10,10000,100000,'test');
 
 /*Table structure for table `tbl_submenu` */
 
@@ -292,12 +295,13 @@ CREATE TABLE `tbl_user` (
   `password` varchar(255) NOT NULL,
   `level` int(10) NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
+  `changedpassword` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`tbl_user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tbl_user` */
 
-insert  into `tbl_user`(`tbl_user_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`password`,`level`,`lastlogin`) values (1,'Y','2020-05-04 12:52:53',0,'2020-05-28 13:52:57',0,'admin','Awn Admin','$2y$10$s1K74zzwo9s3RwsZkFlpteFlYfC5cS4DA/fUnHnV.L9VfFStNV5cu',1,'2020-05-28 13:53:08');
+insert  into `tbl_user`(`tbl_user_id`,`isactive`,`created`,`createdby`,`updated`,`updatedby`,`value`,`name`,`password`,`level`,`lastlogin`,`changedpassword`) values (1,'Y','2020-05-04 12:52:53',1,'2020-05-31 18:49:47',1,'admin','Awn Admin','$2y$10$l3yJgjZu9F62I32efAKr/utUWErHYWgLAYLqwkD6LsOPCTWqP5YuW',1,'2020-06-02 13:30:33','2020-05-31 18:49:47'),(2,'Y','2020-05-31 12:21:39',1,'2020-05-31 12:26:20',2,'Oki-170903','Oki Permana','$2y$10$Cb9Iuyq7s1DrUQ/I/jRNBOe2zy1DB.RmGdCzSsdi15BVA6A/wQ3HK',3,'2020-05-31 12:23:03','2020-05-31 12:26:20');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

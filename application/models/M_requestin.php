@@ -81,6 +81,13 @@ class M_requestin extends CI_Model
 		return $this->db->get();
 	}
 
+	public function countRequestIn()
+	{
+		$this->db->from($this->_table);
+		$this->db->where('status', 'DR');
+		return $this->db->count_all_results();
+	}
+
 	// public function delete($id)
 	// {
 	// 	return $this->db->delete($this->_table, array('tbl_permintaan_id' => $id));

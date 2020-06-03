@@ -119,7 +119,6 @@ class M_product extends CI_Model
 		$this->db->order_by('value', 'ASC');
 		$query = $this->db->get()->result();
 		return $query;
-
 	}
 
 	public function totalTypeBudget($id_product, $type_id)
@@ -192,9 +191,16 @@ class M_product extends CI_Model
 								(SELECT
 									bk.amount AS total
 								FROM tbl_barang b
-								LEFT JOIN tbl_barangkeluar bk ON b.tbl_barang_id = bk.tbl_barang_id AND b.jenis_id = 2
+								LEFT JOIN tbl_barangkeluar bk ON b.tbl_barang_id = bk.tbl_barang_id
 								WHERE b.jenis_id = 2
-								AND YEAR(bk.datetrx) = $year)) xp");
+								AND YEAR(bk.datetrx) = $year)
+								UNION ALL
+								(SELECT
+									p.amount AS total
+								FROM tbl_barang b
+								LEFT JOIN tbl_permintaan p ON b.tbl_barang_id = p.tbl_barang_id
+								WHERE b.jenis_id = 2
+								AND YEAR(p.datetrx) = $year)) xp");
 		return $sql->row();
 	}
 

@@ -18,7 +18,7 @@
       <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
         <div class="tile-stats">
           <div class="icondash"><i class="fa fa-caret-square-o-down"></i></div>
-          <div class="total">-</div>
+          <div class="total"><?= $requestIn ?></div>
           <h3>Jumlah Pengajuan</h3>
         </div>
       </div>
