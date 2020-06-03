@@ -405,7 +405,7 @@ class ProductOut extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $productout->keterangan;
         $file_name = $productout->file;
-        $pathDownload = base_url('/productout/download/'). $productout->file;
+        $pathDownload = base_url('/productout/download/'). $file_name;
         
         if ($qty_out == 0 && $product->jenis_id != 2) {
             $data = array('error_qty' => $qty_out);
