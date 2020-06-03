@@ -405,6 +405,7 @@ class ProductOut extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $productout->keterangan;
         $file_name = $productout->file;
+        $pathDownload = base_url('/productout/download/'). $productout->file;
         
         if ($qty_out == 0 && $product->jenis_id != 2) {
             $data = array('error_qty' => $qty_out);
@@ -424,9 +425,9 @@ class ProductOut extends CI_Controller {
                 'instansi'          => $nama_instansi,
                 'jumlah'            => $qty_out,
                 'tgl_barang_masuk'  => date("Y-m-d"),
-                'keterangan'        => "Test",
+                'keterangan'        => $keterangan,
                 'stat'              => 1,
-                'file'              => $file_name,
+                'pathDownload'      => $pathDownload,
                 'key'               => "inv123"
             );
 
