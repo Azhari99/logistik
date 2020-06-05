@@ -109,17 +109,17 @@ class M_product extends CI_Model
 		return $query;
 	}
 
-	public function listInstitute()
-	{
-		$uri = $this->uri->segment(1);
-		$this->db->select('tbl_instansi_id,
-							value, name, isactive');
-		$this->db->from('tbl_instansi');
-		$this->db->where('isactive', 'Y');
-		$this->db->order_by('value', 'ASC');
-		$query = $this->db->get()->result();
-		return $query;
-	}
+	// public function listInstitute()
+	// {
+	// 	$uri = $this->uri->segment(1);
+	// 	$this->db->select('tbl_instansi_id,
+	// 						value, name, isactive');
+	// 	$this->db->from('tbl_instansi');
+	// 	$this->db->where('isactive', 'Y');
+	// 	$this->db->order_by('value', 'ASC');
+	// 	$query = $this->db->get()->result();
+	// 	return $query;
+	// }
 
 	public function totalTypeBudget($id_product, $type_id)
 	{

@@ -21,6 +21,7 @@
                   <th>Address</th>
                   <th>Email</th>
                   <th>Phone</th>
+                  <th>Remain Budget</th>
                   <th>Annual Budget</th>
                   <th width="50px">Status</th>
                   <th width="50px"></th>

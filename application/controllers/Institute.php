@@ -7,11 +7,12 @@ class Institute extends CI_Controller {
         parent::__construct();
         $this->load->model('m_institute');
         $this->load->model('m_budget');
+        $this->load->model('m_productout');
     }
 
     public function index() 
     {
-    	$this->template->load('overview', 'institute/vInstitute');
+        $this->template->load('overview', 'institute/vInstitute');
     }
 
     public function getAll() 
@@ -21,13 +22,18 @@ class Institute extends CI_Controller {
         $data = array();
         foreach ($list as $value) {
             $row = array();
+            $id_institute = $value->tbl_instansi_id;
+            $insOut = $this->m_productout->totalInstituteOut(null, $id_institute, date('Y'));
+            $annBudget = $value->budget;
+            $remain = $annBudget - $insOut->amount;
             $row[] = $number++;
             $row[] = $value->value;
             $row[] = $value->name;
             $row[] = $value->address;
             $row[] = $value->email;
             $row[] = $value->phone;
-            $row[] = rupiah($value->budget);
+            $row[] = rupiah($remain);
+            $row[] = rupiah($annBudget);
             if($value->isactive == 'Y'){
                 $row[] = '<center><span class="label label-success">Aktif</span></center>';
             } else {

@@ -114,19 +114,29 @@ class M_productout extends CI_Model
 
 	public function totalInstituteOut($id_pout, $id_institute, $datetrx)
 	{
-		$this->db->select_sum('amount');
-		$this->db->from($this->_table);
-		$this->db->where('tbl_instansi_id', $id_institute)
-				->where("DATE_FORMAT(datetrx, '%Y') =", $datetrx);				
+		$this->db->select('bk.amount');
+		$this->db->from('tbl_barangkeluar bk');
+		$this->db->where('bk.tbl_instansi_id', $id_institute)
+				->where("DATE_FORMAT(bk.datetrx, '%Y') =", $datetrx);
 		if (!empty($id_pout)) {
 			$this->db->where('tbl_barangkeluar_id !=', $id_pout);
 		}
-
 		if ($id_pout == "rpt") { //jika id value string rpt (report)
 			$this->db->where('status', 'CO');
 		}
-		$sql = $this->db->get()->row();
-		return $sql;
+		$sql_1 = $this->db->get_compiled_select();
+
+		$this->db->select('p.amount');
+		$this->db->from('tbl_permintaan p');
+		$this->db->where('p.tbl_instansi_id', $id_institute)
+			->where("DATE_FORMAT(p.datetrx, '%Y') =", $datetrx);
+		if ($id_pout == "rpt") { //jika id value string rpt (report)
+			$this->db->where('status', 'CO');
+		}
+		$sql_2 = $this->db->get_compiled_select();
+
+		$query = $this->db->query("SELECT sum(o.amount) as amount FROM ($sql_1 UNION ALL $sql_2) as o");
+		return $query->row();
 	}
 
 	public function totalBudgetProductOut($id_pout, $id_product, $datetrx)
@@ -169,4 +179,19 @@ class M_productout extends CI_Model
 								WHERE bk.tbl_barangkeluar_id = $id ");
 		return $sql->row();
 	}
+
+	// public function intituteBudgetOut($id_institute, $datetrx)
+	// {
+	// 	$sql = $this->db->query("SELECT sum(x.amount) budget_total
+	// 							FROM ((SELECT bk.amount
+	// 							FROM tbl_barangkeluar bk
+	// 							WHERE bk.tbl_instansi_id = $id_institute
+	// 							AND YEAR(bk.datetrx) = $datetrx)
+	// 							UNION ALL
+	// 							(SELECT p.amount
+	// 							FROM tbl_permintaan p
+	// 							WHERE p.tbl_instansi_id = $id_institute
+	// 							AND YEAR(p.datetrx) = $datetrx)) as x");
+	// 	return $sql->row();
+	// }
 }
