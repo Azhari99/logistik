@@ -41,21 +41,38 @@ class ProductOut extends CI_Controller {
             
             $row[] = $value->keterangan;            
             $row[] = $value->file;
-            // $row[] = '<a href="' . base_url('/productout/download/'). $value->file . '">'.$value->file.'</a>';
-            
-            if($value->status == 'CO'){
-                $row[] = '<center><span class="label label-success">Completed</span></center>';
-                $row[] = '<center>            
+
+            $level = $this->session->userdata('level');
+            if ($level == 2) {
+                if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Completed</span></center>';
+                    $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" title="Detail Product Out"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-primary btn-xs" title="Print Product Out"><i class="fa fa-print"></i></a>
+                        </center>';
+                } else {
+                    $row[] = '<center><a href="javascript:void(0)" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
+                    $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-danger btn-xs" title="Delete"><i class="fa fa-trash-o"></i></a>
+                            <a class="btn btn-primary btn-xs" title="Print Product Out"><i class="fa fa-print"></i></a>
+                        </center>';
+                }
+            } else {
+                if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Completed</span></center>';
+                    $row[] = '<center>            
                             <a class="btn btn-primary btn-xs" onclick="detailProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Detail Product Out"><i class="fa fa-eye"></i></a>
                             <a class="btn btn-primary btn-xs"  onclick="printProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Print Product Out"><i class="fa fa-print"></i></a>
                         </center>';
-            } else {
-                $row[] = '<center><a href="javascript:void(0)" onclick="completeProductOut('."'".$value->tbl_barangkeluar_id."'".')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
-                $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" href="productout/edit/'.$value->tbl_barangkeluar_id.'" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-xs"  onclick="deleteProductOut('."'".$value->tbl_barangkeluar_id."'".')" title="Delete"><i class="fa fa-trash-o"></i></a>
-                            <a class="btn btn-primary btn-xs"  onclick="printProductOut('."'".$value->tbl_barangkeluar_id."'".')" title="Print Product Out"><i class="fa fa-print"></i></a>
+                } else {
+                    $row[] = '<center><a href="javascript:void(0)" onclick="completeProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
+                    $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" href="productout/edit/' . $value->tbl_barangkeluar_id . '" title="Edit"><i class="fa fa-edit"></i></a>
+                            <a class="btn btn-danger btn-xs"  onclick="deleteProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Delete"><i class="fa fa-trash-o"></i></a>
+                            <a class="btn btn-primary btn-xs"  onclick="printProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Print Product Out"><i class="fa fa-print"></i></a>
                         </center>';
+                }
             }
             $data[] = $row;
         }

@@ -37,10 +37,18 @@ class Category extends CI_Controller {
             } else {
                 $row[] = '<center><span class="label label-danger">Nonaktif</span></center>';
             }
-            $row[] = '<center>            
-            <a class="btn btn-primary btn-xs" href="category/edit/'.$value->tbl_kategori_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
-            <a class="btn btn-danger btn-xs"  onclick="deleteCategory('."'".$value->tbl_kategori_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
-            </center>';
+            $level = $this->session->userdata('level');
+            if ($level == 2 || $level == 3) {
+                $row[] = '<center>            
+                    <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>            
+                    <a class="btn btn-danger btn-xs" title="Delete"><i class="fa fa-trash-o"></i></a>
+                    </center>';
+            } else {
+                $row[] = '<center>            
+                    <a class="btn btn-primary btn-xs" href="category/edit/'.$value->tbl_kategori_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
+                    <a class="btn btn-danger btn-xs" onclick="deleteCategory('."'".$value->tbl_kategori_id."'".')" title="Delete"><i class="fa fa-trash-o"></i></a>
+                    </center>';
+            }
             $data[] = $row;
         }
         $result = array('data' => $data );

@@ -32,15 +32,27 @@ class Budget extends CI_Controller {
             $row[] = rupiah($budgetAvailable);
             $row[] = rupiah($budget);
             $row[] = $value->keterangan;
-            
-            if($value->status == 'O') {
-                $row[] = '<center><a href="javascript:void(0)" onclick="doPeriode(' . "'" . $value->tbl_anggaran_id . "'" . ')" title="Open Periode"><span class="label label-success">Open</span></a></center>';
-            } else {
-                $row[] = '<center><a href="javascript:void(0)" onclick="doPeriode(' . "'" . $value->tbl_anggaran_id . "'" . ')" title="Close Periode"><span class="label label-default">Closed</span></a></center>';
-            }
-            $row[] = '<center>            
-                <a class="btn btn-primary btn-xs" href="budget/edit/'.$value->tbl_anggaran_id.'" title="Edit"><i class="fa fa-edit"></i></a>
+
+            $level = $this->session->userdata('level');
+            if ($level == 2 || $level == 3) {
+                if ($value->status == 'O') {
+                    $row[] = '<center><a title="Open Periode"><span class="label label-success">Open</span></a></center>';
+                } else {
+                    $row[] = '<center><a title="Close Periode"><span class="label label-default">Closed</span></a></center>';
+                }
+                $row[] = '<center>            
+                <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
                 </center>';
+            } else {
+                if ($value->status == 'O') {
+                    $row[] = '<center><a href="javascript:void(0)" onclick="doPeriode(' . "'" . $value->tbl_anggaran_id . "'" . ')" title="Open Periode"><span class="label label-success">Open</span></a></center>';
+                } else {
+                    $row[] = '<center><a href="javascript:void(0)" onclick="doPeriode(' . "'" . $value->tbl_anggaran_id . "'" . ')" title="Close Periode"><span class="label label-default">Closed</span></a></center>';
+                }
+                $row[] = '<center>            
+                <a class="btn btn-primary btn-xs" href="budget/edit/' . $value->tbl_anggaran_id . '" title="Edit"><i class="fa fa-edit"></i></a>
+                </center>';
+            }
                 // <a class="btn btn-danger btn-xs"  onclick="deleteCategory('."'".$value->tbl_anggaran_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             $data[] = $row;
         }

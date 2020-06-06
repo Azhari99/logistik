@@ -28,9 +28,17 @@ class Type extends CI_Controller {
             } else {
                 $row[] = '<center><span class="label label-danger">Nonaktif</span></center>';
             }
+
+            $level = $this->session->userdata('level');
+            if ($level == 2 || $level == 3) {
             $row[] = '<center>            
-            <a class="btn btn-primary btn-xs" href="type/edit/'.$value->tbl_jenis_id.'" title="Edit"><i class="fa fa-edit"></i></a>            
-            </center>';
+                <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>            
+                </center>';
+            } else {
+                $row[] = '<center>            
+                <a class="btn btn-primary btn-xs" href="type/edit/' . $value->tbl_jenis_id . '" title="Edit"><i class="fa fa-edit"></i></a>            
+                </center>';
+            }
             // <a class="btn btn-danger btn-xs"  onclick="deleteType('."'".$value->tbl_jenis_id."'".')"title="Delete"><i class="fa fa-trash-o"></i></a>
             $data[] = $row;
         }

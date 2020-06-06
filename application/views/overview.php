@@ -1,5 +1,6 @@
 <?php
 isNotLogin();
+isSession();
 ?>
 <!DOCTYPE html>
 <html lang="en">

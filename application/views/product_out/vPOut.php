@@ -7,7 +7,13 @@
         <div class="x_panel">
           <div class="x_title">
             <h2>Product Out</h2>
-            <p class="navbar-right"><a href="<?php echo site_url('productout/add') ?>" class="btn btn-primary">New Product Out</a></p>
+            <?php
+            $level = $this->session->userdata('level');
+            if ($level == 2) { ?>
+              <p class="navbar-right"><a class="btn btn-primary">New Product Out</a></p>
+            <?php } else { ?>
+              <p class="navbar-right"><a href="<?php echo site_url('productout/add') ?>" class="btn btn-primary">New Product Out</a></p>
+            <?php } ?>
             <div class="clearfix"></div>
           </div>
           <div class="x_content">

@@ -6,12 +6,18 @@
       <div class="col-md-12 col-sm-12 col-xs-12">
         <div class="x_panel">
           <div class="x_title">
-            <h2><?php echo ucfirst($this->uri->segment(1)).' Logistics' ?></h2>
-            <p class="navbar-right"><a href="<?php echo site_url('type/add') ?>" class="btn btn-primary">New Type</a></p>
+            <h2><?php echo ucfirst($this->uri->segment(1)) . ' Logistics' ?></h2>
+            <?php
+            $level = $this->session->userdata('level');
+            if ($level == 2 || $level == 3) { ?>
+              <p class="navbar-right"><a class="btn btn-primary">New Type</a></p>
+            <?php } else { ?>
+              <p class="navbar-right"><a href="<?php echo site_url('type/add') ?>" class="btn btn-primary">New Type</a></p>
+            <?php } ?>
             <div class="clearfix"></div>
           </div>
-          <div class="x_content">            
-            <?php echo $this->session->flashdata('msg');?>
+          <div class="x_content">
+            <?php echo $this->session->flashdata('msg'); ?>
             <table id="table-type" class="table table-hover table-bordered">
               <thead>
                 <tr>
