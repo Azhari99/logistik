@@ -139,7 +139,7 @@ class ProductOut extends CI_Controller {
                 $instituteOut = $total + $sumInstituteOut->amount;
                 $budgetOut = $total;
             }
-
+            
             $institute_detail = $this->m_institute->detail($institute)->row();
             $budgetIns = $institute_detail->budget;
 

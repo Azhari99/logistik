@@ -10,7 +10,7 @@ class M_requestin extends CI_Model
 	public function __construct()
     {
         $this->_client = new Client([
-            'base_uri'  => 'http://localhost/rest-api/wpu-rest-client/projectinventory/api/'
+            'base_uri'  => 'http://localhost/rest-api/wpu-rest-server-client/projectinventory/api/'
         ]);
     }
 
