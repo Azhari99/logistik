@@ -415,6 +415,9 @@ class ProductOut extends CI_Controller {
         $productout = $this->m_productout->detail($id)->row();
         $product = $this->m_product->detail($productout->tbl_barang_id)->row();
         $instansi = $this->m_institute->detail($productout->tbl_instansi_id)->row();
+        $documentno = $productout->documentno;
+        $unitprice = $productout->unitprice;
+        $amount = $productout->amount;
         $qtyAvailable = $product->qtyavailable;
         $qty_out = $productout->qtyentered;
         $kode_barang = $product->value;
@@ -441,6 +444,9 @@ class ProductOut extends CI_Controller {
                 'nama_barang'       => $nama_barang,
                 'instansi'          => $nama_instansi,
                 'jumlah'            => $qty_out,
+                'documentno'        => $documentno,
+                'unitprice'         => $unitprice,
+                'amount'            => $amount,
                 'tgl_barang_masuk'  => date("Y-m-d"),
                 'keterangan'        => $keterangan,
                 'stat'              => 1,

@@ -62,6 +62,9 @@ class RequestIn extends CI_Controller {
         $get_detail = $this->m_requestin->detail($id)->row();
         $product = $this->m_product->detail($get_detail->tbl_barang_id)->row();
         $instansi = $this->m_institute->detail($get_detail->tbl_instansi_id)->row();
+        $documentno = $get_detail->documentno;
+        $unitprice = $get_detail->unitprice;
+        $amount = $get_detail->amount;
         $qty_product = $product->qtyavailable;
         $qty_out = $get_detail->qtyentered;
         $kode_barang = $product->value;
@@ -80,14 +83,17 @@ class RequestIn extends CI_Controller {
                         'updated'       => date('Y-m-d H:i:s')
                     );
             $dataApi = array(
-                'kode_barang' => $kode_barang,
-                'nama_barang' => $nama_barang,
-                'instansi' => $nama_instansi,
-                'jumlah' => $qty_out,
+                'kode_barang'      => $kode_barang,
+                'nama_barang'      => $nama_barang,
+                'instansi'         => $nama_instansi,
+                'jumlah'           => $qty_out,
+                'documentno'       => $documentno,
+                'unitprice'        => $unitprice,
+                'amount'           => $amount,
                 'tgl_barang_masuk' => date("Y-m-d"),
-                'keterangan' => $keterangan,
-                'stat' => 1,
-                'key' => "inv123"
+                'keterangan'       => $keterangan,
+                'stat'             => 1,
+                'key'              => "inv123"
             );
             $updateApi = array(
                 'status' => 'CO',
