@@ -96,7 +96,8 @@ class Menu extends CI_Controller
 
     public function actEdit()
     {
-        $this->form_validation->set_rules('name_menu', 'name', 'required');
+        $id = $this->input->post('id_menu');
+        $this->form_validation->set_rules('name_menu', 'name', 'required|callback_menu_check');
         $this->form_validation->set_rules('icon_menu', 'icon', 'required');
         $this->form_validation->set_rules('line_menu', 'line no', 'required');
 
@@ -105,7 +106,8 @@ class Menu extends CI_Controller
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>');
 
         if ($this->form_validation->run() == FALSE) {
-            $this->template->load('overview', 'menu/editMenu');
+            $data['menu_id'] = $id;
+            $this->template->load('overview', 'menu/editMenu', $data);
         } else {
             $this->m_menu->update();
             if ($this->db->affected_rows() > 0) {
@@ -115,6 +117,18 @@ class Menu extends CI_Controller
                     'Data berhasil diubah</div>');
             }
             echo "<script>window.location='" . site_url('menu') . "';</script>";
+        }
+    }
+
+    public function menu_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_menu WHERE name = '$post[name_menu]' AND tbl_menu_id != '$post[id_menu]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('menu_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 

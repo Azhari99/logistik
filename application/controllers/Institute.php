@@ -126,7 +126,7 @@ class Institute extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_instansi');
-        $this->form_validation->set_rules('name_ins', 'name', 'required');
+        $this->form_validation->set_rules('name_ins', 'name', 'required|callback_ins_check');
         $this->form_validation->set_rules('address_ins', 'address', 'required');
         $this->form_validation->set_rules('email_ins', 'email', 'required|valid_email');
 
@@ -166,6 +166,18 @@ class Institute extends CI_Controller {
                 }
                 echo "<script>window.location='" . site_url('institute/edit/'.$id) . "';</script>";
             }
+        }
+    }
+
+    public function ins_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_instansi WHERE name = '$post[name_ins]' AND tbl_instansi_id != '$post[id_instansi]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('ins_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 

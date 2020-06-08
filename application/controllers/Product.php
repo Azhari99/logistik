@@ -176,7 +176,7 @@ class Product extends CI_Controller {
         $unitprice = $this->input->post('unitprice_product');
         $budget = $this->input->post('budget_product');
 
-        $this->form_validation->set_rules('name_product','name','required');
+        $this->form_validation->set_rules('name_product','name', 'required|callback_product_check');
         $this->form_validation->set_rules('typelog_product', 'type logistics', 'required');
         $this->form_validation->set_rules('budget_product', 'budget', 'required');
         if ($typelog != 2) {
@@ -257,6 +257,18 @@ class Product extends CI_Controller {
                 echo "<script>window.location='" . site_url('product') . "';</script>";
             }
             
+        }
+    }
+
+    public function product_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_barang WHERE name = '$post[name_product]' AND tbl_barang_id != '$post[id_barang]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('product_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 

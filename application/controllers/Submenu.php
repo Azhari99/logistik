@@ -99,7 +99,8 @@ class Submenu extends CI_Controller
 
     public function actEdit()
     {
-        $this->form_validation->set_rules('name_sub', 'name', 'required');
+        $id = $this->input->post('id_sub');
+        $this->form_validation->set_rules('name_sub', 'name', 'required|callback_sub_check');
         $this->form_validation->set_rules('menu_id', 'parent menu', 'required');
         $this->form_validation->set_rules('line_sub', 'line no', 'required');
         $this->form_validation->set_rules('url_sub', 'line no', 'required');
@@ -121,6 +122,18 @@ class Submenu extends CI_Controller
                     'Data berhasil diubah</div>');
             }
             echo "<script>window.location='" . site_url('submenu') . "';</script>";
+        }
+    }
+
+    public function sub_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_submenu WHERE name = '$post[name_sub]' AND tbl_submenu_id != '$post[id_sub]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('sub_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 

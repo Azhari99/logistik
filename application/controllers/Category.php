@@ -105,7 +105,7 @@ class Category extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_kategori');
-        $this->form_validation->set_rules('name_cat','name','required');
+        $this->form_validation->set_rules('name_cat','name', 'required|callback_category_check');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 
@@ -122,6 +122,18 @@ class Category extends CI_Controller {
                     'Data berhasil diubah</div>');
             }
             echo "<script>window.location='".site_url('category')."';</script>";
+        }
+    }
+
+    public function category_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_kategori WHERE name = '$post[name_cat]' AND tbl_kategori_id != '$post[id_kategori]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('category_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 

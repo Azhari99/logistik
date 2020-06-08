@@ -93,7 +93,7 @@ class Type extends CI_Controller {
     public function actEdit()
     {
         $id = $this->input->post('id_jenis');
-        $this->form_validation->set_rules('name_type','name','required');
+        $this->form_validation->set_rules('name_type','name', 'required|callback_type_check');
 
         $this->form_validation->set_error_delimiters('<span class="help-block">', '</span>'); 
 
@@ -109,6 +109,18 @@ class Type extends CI_Controller {
                     'Data berhasil diubah</div>');
             }
             echo "<script>window.location='".site_url('type')."';</script>";
+        }
+    }
+
+    public function type_check()
+    {
+        $post = $this->input->post(null, TRUE);
+        $sql = $this->db->query("SELECT * FROM tbl_jenis_logistik WHERE name = '$post[name_type]' AND tbl_jenis_logistik_id != '$post[id_jenis]'");
+        if ($sql->num_rows() > 0) {
+            $this->form_validation->set_message('type_check', 'This %s already exists.');
+            return FALSE;
+        } else {
+            return TRUE;
         }
     }
 
