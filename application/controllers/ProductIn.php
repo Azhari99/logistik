@@ -42,14 +42,11 @@ class ProductIn extends CI_Controller {
                 if ($value->status == 'CO') {
                     $row[] = '<center><span class="label label-success">Completed</span></center>';
                     $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" title="Detail Product In"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-primary btn-xs" onclick="detailProductIn(' . "'" . $value->tbl_barangmasuk_id . "'" . ')" title="Detail Product In"><i class="fa fa-eye"></i></a>
                         </center>';
                 } else {
                     $row[] = '<center><a href="javascript:void(0)" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
-                    $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-xs" title="Delete"><i class="fa fa-trash-o"></i></a>
-                        </center>';
+                    $row[] = '';
                 }
             } else {
                 if ($value->status == 'CO') {

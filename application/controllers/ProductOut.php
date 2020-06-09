@@ -46,17 +46,12 @@ class ProductOut extends CI_Controller {
             if ($level == 2) {
                 if ($value->status == 'CO') {
                     $row[] = '<center><span class="label label-success">Completed</span></center>';
-                    $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" title="Detail Product Out"><i class="fa fa-eye"></i></a>
-                            <a class="btn btn-primary btn-xs" title="Print Product Out"><i class="fa fa-print"></i></a>
+                    $row[] = '<center>
+                                <a class="btn btn-primary btn-xs" onclick="detailProductOut(' . "'" . $value->tbl_barangkeluar_id . "'" . ')" title="Detail Product Out"><i class="fa fa-eye"></i></a>
                         </center>';
                 } else {
                     $row[] = '<center><a href="javascript:void(0)" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
-                    $row[] = '<center>            
-                            <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a class="btn btn-danger btn-xs" title="Delete"><i class="fa fa-trash-o"></i></a>
-                            <a class="btn btn-primary btn-xs" title="Print Product Out"><i class="fa fa-print"></i></a>
-                        </center>';
+                    $row[] = '';
                 }
             } else {
                 if ($value->status == 'CO') {

@@ -9,9 +9,7 @@
             <h2>Product In</h2>
             <?php
             $level = $this->session->userdata('level');
-            if ($level == 2) { ?>
-              <p class="navbar-right"><a class="btn btn-primary">New Product In</a></p>
-            <?php } else { ?>
+            if (!($level == 2)) { ?>
               <p class="navbar-right"><a href="<?php echo site_url('productin/add') ?>" class="btn btn-primary">New Product In</a></p>
             <?php } ?>
             <div class="clearfix"></div>

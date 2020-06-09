@@ -41,9 +41,7 @@ class Institute extends CI_Controller {
             }
             $level = $this->session->userdata('level');
             if ($level == 2 || $level == 3) {
-                $row[] = '<center>            
-                <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>            
-                </center>';
+                $row[] = '';
             } else {
                 $row[] = '<center>            
                 <a class="btn btn-primary btn-xs" href="institute/edit/' . $value->tbl_instansi_id . '" title="Edit"><i class="fa fa-edit"></i></a>            

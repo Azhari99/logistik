@@ -9,9 +9,7 @@
             <h2><?php echo ucfirst($this->uri->segment(1)) ?></h2>
             <?php
             $level = $this->session->userdata('level');
-            if ($level == 2 || $level == 3) { ?>
-              <p class="navbar-right"><a class="btn btn-primary">New Menu</a></p>
-            <?php } else { ?>
+            if (!($level == 2 || $level == 3)) { ?>
               <p class="navbar-right"><a href="<?php echo site_url('menu/add') ?>" class="btn btn-primary">New Menu</a></p>
             <?php } ?>
             <div class="clearfix"></div>

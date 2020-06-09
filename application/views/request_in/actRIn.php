@@ -45,7 +45,6 @@
 	}
 
 	function completeProductRIn(id) {
-		console.log(id);
 		if (confirm("Apakah data akan di complete ?")) {
 			$.ajax({
 				url: '<?php echo site_url('requestin/actComplete/') ?>' + id,
@@ -93,7 +92,11 @@
 					$('[name="total_req"]').val(formatRupiah(data[i].amount))
 					$('[name="budget_req"]').val(formatRupiah(data[i].amount))
 					$('[name="desc_req"]').val(data[i].keterangan)
-					$('[name="status_req"]').val('Completed')
+					if (data[i].status == 'CO') {
+						$('[name="status_req"]').val('Completed')
+					} else {
+						$('[name="status_req"]').val('Drafted')
+					}
 				})
 				$('.modal-title').text('Detail Request In')
 				$('#modal_request_in').modal({
@@ -112,6 +115,6 @@
 			$('input[name=amount]').val('')
 			$('#datetrx').datepicker('setDate', new Date($.now()))
 		})
-		
+
 	}
 </script>

@@ -36,11 +36,19 @@ class RequestIn extends CI_Controller {
             }
             
             $row[] = $value->keterangan;
-            
-            if($value->status == 'CO'){
-                $row[] = '<center><span class="label label-success">Completed</span></center>';
+            $level = $this->session->userdata('level');
+            if ($level == 2) {
+                if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Completed</span></center>';
+                } else {
+                    $row[] = '<center><span class="label label-warning">Drafted</span></center>';
+                }
             } else {
-                $row[] = '<center><a href="javascript:void(0)" onclick="completeProductRIn('."'".$value->tbl_permintaan_id."'".')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
+                if ($value->status == 'CO') {
+                    $row[] = '<center><span class="label label-success">Completed</span></center>';
+                } else {
+                    $row[] = '<center><a href="javascript:void(0)" onclick="completeProductRIn(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Proses"><span class="label label-warning">Drafted</span></a></center>';
+                }
             }
             $row[] = '<center><a class="btn btn-primary btn-xs" onclick="detailRequestIn(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Detail Request In"><i class="fa fa-eye"></i></a></center>';
 
@@ -93,6 +101,7 @@ class RequestIn extends CI_Controller {
                 'tgl_barang_masuk' => date("Y-m-d"),
                 'keterangan'       => $keterangan,
                 'stat'             => 1,
+                'pathDownload'      => '',
                 'key'              => "inv123"
             );
             $updateApi = array(

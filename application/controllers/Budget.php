@@ -40,9 +40,7 @@ class Budget extends CI_Controller {
                 } else {
                     $row[] = '<center><a title="Close Periode"><span class="label label-default">Closed</span></a></center>';
                 }
-                $row[] = '<center>            
-                <a class="btn btn-primary btn-xs" title="Edit"><i class="fa fa-edit"></i></a>
-                </center>';
+                $row[] = '';
             } else {
                 if ($value->status == 'O') {
                     $row[] = '<center><a href="javascript:void(0)" onclick="doPeriode(' . "'" . $value->tbl_anggaran_id . "'" . ')" title="Open Periode"><span class="label label-success">Open</span></a></center>';
