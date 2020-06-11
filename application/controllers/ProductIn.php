@@ -35,7 +35,14 @@ class ProductIn extends CI_Controller {
             
             $row[] = rupiah($value->amount);
             $row[] = $value->keterangan;
-            $row[] = $value->file;
+
+            if (!empty($value->file)) {
+                $row[] = '<center>
+                    <a class="btn btn-primary btn-xs" href="upload/nodin/' . $value->file . '" target="_blank"><i class="fa fa-download"></i></a>
+                    </center>';
+            } else {
+                $row[] = '';
+            }
 
             $level = $this->session->userdata('level');
             if ($level == 2) {

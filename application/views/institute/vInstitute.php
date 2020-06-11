@@ -28,7 +28,7 @@
                   <th>Remain Budget</th>
                   <th>Annual Budget</th>
                   <th width="50px">Status</th>
-                  <th width="50px"></th>
+                  <th width="50px">Action</th>
                 </tr>
               </thead>
             </table>

@@ -32,7 +32,7 @@
                   <th>Description</th>
                   <th>Created</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
             </table>

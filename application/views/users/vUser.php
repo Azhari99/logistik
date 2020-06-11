@@ -24,7 +24,7 @@
                   <th>Name</th>
                   <th>Level</th>
                   <th width="20px">Status</th>
-                  <th width="100px"></th>
+                  <th width="100px">Action</th>
                 </tr>
               </thead>
             </table>

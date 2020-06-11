@@ -19,11 +19,13 @@
                   <th>Document No</th>
                   <th>Product</th>
                   <th>Institute</th>
-                  <th>Date</th>
+                  <th width="50px">Date</th>
                   <th width="10px">Qty</th>
+                  <th>Price</th>
+                  <th>Amount</th>
                   <th>Description</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
             </table>

@@ -23,7 +23,7 @@
                   <th width="100px">Code Type</th>
                   <th>Name</th>
                   <th width="50px">Status</th>
-                  <th width="50px"></th>
+                  <th width="50px">Action</th>
                 </tr>
               </thead>
             </table>

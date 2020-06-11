@@ -28,7 +28,7 @@
                   <th>Description</th>
                   <th>File</th>
                   <th>Status</th>
-                  <th></th>
+                  <th>Action</th>
                 </tr>
               </thead>
             </table>

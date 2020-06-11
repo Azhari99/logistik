@@ -31,10 +31,12 @@ class RequestIn extends CI_Controller {
             $row[] = date('d-m-Y',strtotime($value->datetrx));
             if ($value->jenis_id != 2) {
                 $row[] = $value->qtyentered;
+                $row[] = rupiah($value->unitprice);
             } else {
                 $row[] = "-";
+                $row[] = "-";
             }
-            
+            $row[] = rupiah($value->amount);
             $row[] = $value->keterangan;
             $level = $this->session->userdata('level');
             if ($level == 2) {

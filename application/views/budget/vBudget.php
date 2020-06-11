@@ -26,7 +26,7 @@
                   <th>Annual Budget</th>
                   <th>Description</th>
                   <th>Period</th>
-                  <th width="50px"></th>
+                  <th width="50px">Action</th>
                 </tr>
               </thead>
             </table>

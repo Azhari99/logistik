@@ -145,11 +145,19 @@ class M_product extends CI_Model
 								WHERE b.jenis_id = $type_id
 								AND YEAR(bm.datetrx) = $year");
 		} else {
-			$sql = $this->db->query("SELECT sum(bk.amount) as budget_total
+			$sql = $this->db->query("SELECT
+									sum(x.budget) as budget_total
+								FROM ((SELECT sum(bk.amount) as budget
 								FROM tbl_barang b
 								LEFT JOIN tbl_barangkeluar bk ON b.tbl_barang_id = bk.tbl_barang_id
 								WHERE b.jenis_id = $type_id
-								AND YEAR(bk.datetrx) = $year");
+								AND YEAR(bk.datetrx) = $year)
+								UNION ALL
+								(SELECT sum(p.amount) as budget
+								FROM tbl_barang b
+								LEFT JOIN tbl_permintaan p ON b.tbl_barang_id = p.tbl_barang_id
+								WHERE b.jenis_id = $type_id
+								AND YEAR(p.datetrx) = $year)) as x");
 		}
 		
 		return $sql->row();
@@ -161,18 +169,28 @@ class M_product extends CI_Model
 			$sql = $this->db->query("SELECT sum(bm.amount) as budget_out
 								FROM tbl_barang b
 								LEFT JOIN tbl_barangmasuk bm ON b.tbl_barang_id = bm.tbl_barang_id
-								WHERE b.tbl_barang_id = $id_product
+								WHERE bm.tbl_barang_id = $id_product
 								AND b.jenis_id = $type_id
 								AND bm.status = 'CO'
 								AND YEAR(bm.datetrx) = $year");
 		} else { //budget keluar dari barang keluar
-			$sql = $this->db->query("SELECT sum(bk.amount) as budget_out
+			$sql = $this->db->query("SELECT
+									sum(x.budget) as budget_out
+								FROM ((SELECT sum(bk.amount) as budget
 								FROM tbl_barang b
 								LEFT JOIN tbl_barangkeluar bk ON b.tbl_barang_id = bk.tbl_barang_id
-								WHERE b.tbl_barang_id = $id_product
+								WHERE bk.tbl_barang_id = $id_product
 								AND b.jenis_id = $type_id
 								AND bk.status = 'CO'
-								AND YEAR(bk.datetrx) = $year");
+								AND YEAR(bk.datetrx) = $year)
+								UNION ALL
+								(SELECT sum(p.amount) as budget
+								FROM tbl_barang b
+								LEFT JOIN tbl_permintaan p ON b.tbl_barang_id = p.tbl_barang_id
+								WHERE p.tbl_barang_id = $id_product
+								AND b.jenis_id = $type_id
+								AND p.status = 'CO'
+								AND YEAR(p.datetrx) = $year)) as x");
 		}
 		
 		return $sql->row();

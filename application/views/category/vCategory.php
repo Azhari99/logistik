@@ -24,7 +24,7 @@
                   <th>Name</th>
                   <th>Type Logistics</th>
                   <th width="50px">Status</th>
-                  <th width="60px"></th>
+                  <th width="60px">Action</th>
                 </tr>
               </thead>
             </table>
