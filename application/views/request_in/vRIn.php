@@ -26,6 +26,7 @@
                   <th>Description</th>
                   <th>Status</th>
                   <th>Action</th>
+                  <th>File</th>
                 </tr>
               </thead>
             </table>

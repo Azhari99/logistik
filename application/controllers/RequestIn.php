@@ -24,6 +24,7 @@ class RequestIn extends CI_Controller {
             $row = array();
             $product = $value->value.'-'.$value->name;
             $institute = $value->code_institute.'-'.$value->name_institute;
+            $linkDownload = $value->pathDownload;
             $row[] = $number++;
             $row[] = $value->documentno;
             $row[] = $product;
@@ -53,6 +54,10 @@ class RequestIn extends CI_Controller {
                 }
             }
             $row[] = '<center><a class="btn btn-primary btn-xs" onclick="detailRequestIn(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Detail Request In"><i class="fa fa-eye"></i></a></center>';
+            
+            $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" href="' . $linkDownload . '" title="Download"><i class="fa fa-download"></i></a>
+                        </center>';
 
             $data[] = $row;
         }

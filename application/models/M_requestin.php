@@ -25,6 +25,7 @@ class M_requestin extends CI_Model
 							tbl_permintaan.created,
 							tbl_permintaan.unitprice,
 							tbl_permintaan.amount,
+                            tbl_permintaan.pathDownload,
 							tbl_barang.value,
 							tbl_barang.name,							
 							tbl_barang.jenis_id,
