@@ -427,6 +427,8 @@ class ProductOut extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $productout->keterangan;
         $file_name = $productout->file;
+        $typeId = $product->jenis_id;
+        $categoryId = $product->kategori_id;
         $pathDownload = base_url('/productout/download/'). $file_name;
         
         if ($qty_out == 0 && $product->jenis_id != 2) {
@@ -453,6 +455,8 @@ class ProductOut extends CI_Controller {
                 'keterangan'        => $keterangan,
                 'stat'              => 1,
                 'pathDownload'      => $pathDownload,
+                'jenis_id'          => $typeId,
+                'kategori_id'       => $categoryId,
                 'key'               => "inv123"
             );
 
