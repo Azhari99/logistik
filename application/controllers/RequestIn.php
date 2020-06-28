@@ -87,6 +87,8 @@ class RequestIn extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $get_detail->keterangan;
         $documentno = $get_detail->documentno;
+        $typeId = $product->jenis_id;
+        $categoryId = $product->kategori_id;
         
         if ($qty_out <= $qty_product) {
             $param_out = array(
@@ -109,6 +111,8 @@ class RequestIn extends CI_Controller {
                 'keterangan'       => $keterangan,
                 'stat'             => 1,
                 'pathDownload'      => '',
+                'jenis_id'          => $typeId,
+                'kategori_id'       => $categoryId,
                 'key'              => "inv123"
             );
             $updateApi = array(
