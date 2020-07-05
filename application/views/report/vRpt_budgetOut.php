@@ -71,6 +71,16 @@
                   </select>
                 </div>
               </div>
+              <div class="item form-group" id="listtransaction">
+                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="t_transaction">Type Transaction
+                </label>
+                <div class="col-md-3 col-sm-3 col-xs-12">
+                  <select class="form-control select2" name="t_transaction" style="width: 100%">
+                    <option value="PI">Product In</option>
+                    <option value="PO" selected>Product Out</option>
+                  </select>
+                </div>
+              </div>
               <div class="item form-group">
                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="datetrx">Date Trasansaction <span class="required">*</span>
                 </label>

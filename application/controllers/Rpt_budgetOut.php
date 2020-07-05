@@ -37,6 +37,7 @@ class Rpt_budgetOut extends CI_Controller
     public function report($setPost, $oriDateStart, $oriDateEnd, $date_start, $date_end)
     {
         $options = $setPost['inlineRadioOptions'];
+        $transaction = $setPost['t_transaction'];
         $id_product = $setPost['listproduct'];
         $id_institute = $setPost['listinstitute'];
         $id_category = $setPost['listcategory'];
@@ -52,28 +53,28 @@ class Rpt_budgetOut extends CI_Controller
                 $detail_product = $this->m_product->detail($id_product)->row();
                 $data_head = $detail_product->value . "-" . $detail_product->name;
             }
-            $result = $this->m_product->listProductOut($options, $id_product, $date_start, $date_end);
+            $result = $this->m_product->listProductOut($options, $id_product, $transaction, $date_start, $date_end);
             $budget = $this->m_budget->budgetYear($date_start, $date_end);
         } else if ($options == "institute") {
             if (!empty($id_institute)) {
                 $detail_institute = $this->m_institute->detail($id_institute)->row();
                 $data_head = $detail_institute->value . "-" . $detail_institute->name;
             }
-            $result = $this->m_product->listProductOut($options, $id_institute, $date_start, $date_end);
+            $result = $this->m_product->listProductOut($options, $id_institute, "PO",  $date_start, $date_end);
             $budget = $this->m_institute->totalInstituteBudget($id_institute);
         } else if ($options == "category") {
             if (!empty($id_category)) {
                 $detail_category = $this->m_category-> detail($id_category)->row();
                 $data_head = $detail_category->value . "-" . $detail_category->name;
             }
-            $result = $this->m_product->listProductOut($options, $id_category, $date_start, $date_end);
+            $result = $this->m_product->listProductOut($options, $id_category, $transaction, $date_start, $date_end);
             $budget = $this->m_budget->budgetYear($date_start, $date_end);
         } else {
             if (!empty($id_type)) {
                 $detail_type = $this->m_type-> detail($id_type)->row();
                 $data_head = $detail_type->value . "-" . $detail_type->name;
             }
-            $result = $this->m_product->listProductOut($options, $id_type, $date_start, $date_end);
+            $result = $this->m_product->listProductOut($options, $id_type, $transaction, $date_start, $date_end);
             $budget = $this->m_budget->budgetYear($date_start, $date_end);
         }
 
