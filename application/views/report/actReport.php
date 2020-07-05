@@ -4,6 +4,7 @@
     $("#listinstitute").hide();
     $("#listcategory").hide();
     $("#listtype").hide();
+    $("#listtransaction").show();
   });
 
   $("#inlineRadio1").click(function() {
@@ -11,6 +12,7 @@
     $("#listinstitute").hide();
     $("#listcategory").hide();
     $("#listtype").hide();
+    $("#listtransaction").show();
   });
 
   $("#inlineRadio2").click(function() {
@@ -18,6 +20,7 @@
     $("#listinstitute").show();
     $("#listcategory").hide();
     $("#listtype").hide();
+    $("#listtransaction").hide();
   });
 
   $("#inlineRadio3").click(function() {
@@ -25,6 +28,7 @@
     $("#listinstitute").hide();
     $("#listcategory").show();
     $("#listtype").hide();
+    $("#listtransaction").show();
   });
 
   $("#inlineRadio4").click(function() {
@@ -32,5 +36,6 @@
     $("#listinstitute").hide();
     $("#listcategory").hide();
     $("#listtype").show();
+    $("#listtransaction").show();
   });
 </script>
