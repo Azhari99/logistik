@@ -96,12 +96,20 @@ class RequestIn extends CI_Controller {
             $param_out = array(
                     'status' => 'CO'
                 );
-            $data_product = array(
-                        'qtyavailable'  =>  $qty_product - $qty_out,
-                        'budgetAnggaranAvailable' => $budget_product - $budget_out,
-                        'updatedby'     => $this->session->userdata('userid'),
-                        'updated'       => date('Y-m-d H:i:s')
-                    );
+            if ($product->jenis_id != 2){
+                $data_product = array(
+                    'qtyavailable'  => $qty_product - $qty_out,
+                    'updatedby'     => $this->session->userdata('userid'),
+                    'updated'       => date('Y-m-d H:i:s')
+                );
+            } else {
+                $data_product = array(
+                    'qtyavailable'  => $qty_product - $qty_out,
+                    'budgetAnggaranAvailable' => $budget_product - $budget_out,
+                    'updatedby'     => $this->session->userdata('userid'),
+                    'updated'       => date('Y-m-d H:i:s')
+                );
+            }
             $dataApi = array(
                 'kode_barang'      => $kode_barang,
                 'nama_barang'      => $nama_barang,

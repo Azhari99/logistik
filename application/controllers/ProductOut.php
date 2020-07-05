@@ -432,7 +432,7 @@ class ProductOut extends CI_Controller {
         $typeId = $product->jenis_id;
         $categoryId = $product->kategori_id;
         $pathDownload = base_url('/productout/download/'). $file_name;
-        
+
         if ($qty_out == 0 && $product->jenis_id != 2) {
             $data = array('error_qty' => $qty_out);
         } else {
@@ -440,12 +440,20 @@ class ProductOut extends CI_Controller {
                 'status'        => 'CO',
                 'updated'       => date('Y-m-d H:i:s')
             );
-            $data_product = array(
-                'qtyavailable'  => $qtyAvailable - $qty_out,
-                'budgetAnggaranAvailable' => $budgetAvailable - $budget_out,
-                'updatedby'     => $this->session->userdata('userid'),
-                'updated'       => date('Y-m-d H:i:s')
-            );
+            if ($product->jenis_id != 2){
+                $data_product = array(
+                    'qtyavailable'  => $qtyAvailable - $qty_out,
+                    'updatedby'     => $this->session->userdata('userid'),
+                    'updated'       => date('Y-m-d H:i:s')
+                );
+            } else {
+                $data_product = array(
+                    'qtyavailable'  => $qtyAvailable - $qty_out,
+                    'budgetAnggaranAvailable' => $budgetAvailable - $budget_out,
+                    'updatedby'     => $this->session->userdata('userid'),
+                    'updated'       => date('Y-m-d H:i:s')
+                );
+            }
             $dataApi = array(
                 'kode_barang'       => $kode_barang,
                 'nama_barang'       => $nama_barang,
