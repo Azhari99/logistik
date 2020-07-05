@@ -420,6 +420,8 @@ class ProductOut extends CI_Controller {
         $documentno = $productout->documentno;
         $unitprice = $productout->unitprice;
         $amount = $productout->amount;
+        $budgetAvailable = $product->budgetAnggaranAvailable;
+        $budget_out = $productout->amount;
         $qtyAvailable = $product->qtyavailable;
         $qty_out = $productout->qtyentered;
         $kode_barang = $product->value;
@@ -427,6 +429,8 @@ class ProductOut extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $productout->keterangan;
         $file_name = $productout->file;
+        $typeId = $product->jenis_id;
+        $categoryId = $product->kategori_id;
         $pathDownload = base_url('/productout/download/'). $file_name;
         
         if ($qty_out == 0 && $product->jenis_id != 2) {
@@ -438,6 +442,7 @@ class ProductOut extends CI_Controller {
             );
             $data_product = array(
                 'qtyavailable'  => $qtyAvailable - $qty_out,
+                'budgetAnggaranAvailable' => $budgetAvailable - $budget_out,
                 'updatedby'     => $this->session->userdata('userid'),
                 'updated'       => date('Y-m-d H:i:s')
             );
@@ -453,6 +458,8 @@ class ProductOut extends CI_Controller {
                 'keterangan'        => $keterangan,
                 'stat'              => 1,
                 'pathDownload'      => $pathDownload,
+                'jenis_id'          => $typeId,
+                'kategori_id'       => $categoryId,
                 'key'               => "inv123"
             );
 

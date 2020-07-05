@@ -24,6 +24,7 @@ class RequestIn extends CI_Controller {
             $row = array();
             $product = $value->value.'-'.$value->name;
             $institute = $value->code_institute.'-'.$value->name_institute;
+            $linkDownload = $value->pathDownload;
             $row[] = $number++;
             $row[] = $value->documentno;
             $row[] = $product;
@@ -53,6 +54,10 @@ class RequestIn extends CI_Controller {
                 }
             }
             $row[] = '<center><a class="btn btn-primary btn-xs" onclick="detailRequestIn(' . "'" . $value->tbl_permintaan_id . "'" . ')" title="Detail Request In"><i class="fa fa-eye"></i></a></center>';
+            
+            $row[] = '<center>            
+                            <a class="btn btn-primary btn-xs" href="' . $linkDownload . '" title="Download"><i class="fa fa-download"></i></a>
+                        </center>';
 
             $data[] = $row;
         }
@@ -75,6 +80,8 @@ class RequestIn extends CI_Controller {
         $documentno = $get_detail->documentno;
         $unitprice = $get_detail->unitprice;
         $amount = $get_detail->amount;
+        $budget_product = $product->budgetAnggaranAvailable;
+        $budget_out = $get_detail->amount;
         $qty_product = $product->qtyavailable;
         $qty_out = $get_detail->qtyentered;
         $kode_barang = $product->value;
@@ -82,6 +89,8 @@ class RequestIn extends CI_Controller {
         $nama_instansi = $instansi->name;
         $keterangan = $get_detail->keterangan;
         $documentno = $get_detail->documentno;
+        $typeId = $product->jenis_id;
+        $categoryId = $product->kategori_id;
         
         if ($qty_out <= $qty_product) {
             $param_out = array(
@@ -89,6 +98,7 @@ class RequestIn extends CI_Controller {
                 );
             $data_product = array(
                         'qtyavailable'  =>  $qty_product - $qty_out,
+                        'budgetAnggaranAvailable' => $budget_product - $budget_out,
                         'updatedby'     => $this->session->userdata('userid'),
                         'updated'       => date('Y-m-d H:i:s')
                     );
@@ -104,6 +114,8 @@ class RequestIn extends CI_Controller {
                 'keterangan'       => $keterangan,
                 'stat'             => 1,
                 'pathDownload'      => '',
+                'jenis_id'          => $typeId,
+                'kategori_id'       => $categoryId,
                 'key'              => "inv123"
             );
             $updateApi = array(
