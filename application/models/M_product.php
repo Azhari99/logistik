@@ -224,7 +224,7 @@ class M_product extends CI_Model
 		return $sql->row();
 	}
 
-	public function listProductOut($options, $id, $start, $end)
+	public function listProductOut($options, $id, $transaction, $start, $end)
 	{
 		$this->db->select('b.tbl_barang_id,
 							b.value,
@@ -267,7 +267,7 @@ class M_product extends CI_Model
 			if (!empty($id)) {
 				$this->db->where('bk.tbl_barang_id', $id);
 			}
-			$this->db->where('b.jenis_id', 2);
+			// $this->db->where('b.jenis_id', 2);
 		} else if ($options == "institute" && !empty($id)) {
 			$this->db->where('bk.tbl_instansi_id', $id);
 		} else if ($options == "category" && !empty($id)) {
@@ -302,7 +302,12 @@ class M_product extends CI_Model
 			}
 		}
 		$sql_3 = $this->db->get_compiled_select();
-		$query = $this->db->query($sql_1 . ' UNION ALL ' .$sql_2 . ' UNION ALL ' . $sql_3);
+
+		if ($transaction == "PI") {
+			$query = $this->db->query($sql_1);
+		} else if ($transaction == "PO") {
+			$query = $this->db->query($sql_2 . ' UNION ALL ' . $sql_3);
+		}
 		return $query->result();
 	}
 }
