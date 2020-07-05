@@ -49,10 +49,12 @@ class M_product extends CI_Model
         }
         if ($type_id != 2) {
         	$this->qtyentered = $post['qty_product'];
-        	$this->unitprice = changeFormat($post['unitprice_product']);
+			$this->unitprice = changeFormat($post['unitprice_product']);
+			$this->budgetAnggaranAvailable = 0;
         } else {
         	$this->qtyentered = 0;
-        	$this->unitprice = 0;
+			$this->unitprice = 0;
+			$this->budgetAnggaranAvailable = changeFormat($post['budget_product']);
         }
         $this->budget = changeFormat($post['budget_product']);
 		$this->db->insert($this->_table, $this);

@@ -420,6 +420,8 @@ class ProductOut extends CI_Controller {
         $documentno = $productout->documentno;
         $unitprice = $productout->unitprice;
         $amount = $productout->amount;
+        $budgetAvailable = $product->budgetAnggaranAvailable;
+        $budget_out = $productout->amount;
         $qtyAvailable = $product->qtyavailable;
         $qty_out = $productout->qtyentered;
         $kode_barang = $product->value;
@@ -440,6 +442,7 @@ class ProductOut extends CI_Controller {
             );
             $data_product = array(
                 'qtyavailable'  => $qtyAvailable - $qty_out,
+                'budgetAnggaranAvailable' => $budgetAvailable - $budget_out,
                 'updatedby'     => $this->session->userdata('userid'),
                 'updated'       => date('Y-m-d H:i:s')
             );

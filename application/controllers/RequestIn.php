@@ -80,6 +80,8 @@ class RequestIn extends CI_Controller {
         $documentno = $get_detail->documentno;
         $unitprice = $get_detail->unitprice;
         $amount = $get_detail->amount;
+        $budget_product = $product->budgetAnggaranAvailable;
+        $budget_out = $get_detail->amount;
         $qty_product = $product->qtyavailable;
         $qty_out = $get_detail->qtyentered;
         $kode_barang = $product->value;
@@ -96,6 +98,7 @@ class RequestIn extends CI_Controller {
                 );
             $data_product = array(
                         'qtyavailable'  =>  $qty_product - $qty_out,
+                        'budgetAnggaranAvailable' => $budget_product - $budget_out,
                         'updatedby'     => $this->session->userdata('userid'),
                         'updated'       => date('Y-m-d H:i:s')
                     );
