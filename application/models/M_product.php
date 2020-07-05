@@ -294,6 +294,8 @@ class M_product extends CI_Model
 				->where('p.status', 'CO');
 		if ($options == "product" && !empty($id)) {
 			$this->db->where('p.tbl_barang_id', $id);
+		} else if ($options == "institute" && !empty($id)) {
+			$this->db->where('p.tbl_instansi_id', $id);
 		} else if ($options == "category" && !empty($id)) {
 			$this->db->where('b.kategori_id', $id);
 		} else {
